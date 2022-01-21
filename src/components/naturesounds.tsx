@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SoundsInfo } from './canvas';
 
 const audio = (track: string) => {
     const sound = new Audio(track)
@@ -7,7 +8,7 @@ const audio = (track: string) => {
     return sound;
 }
 
-type PossibleTracks = "rain" | "birds" | "thunder" | "volcano" | "wind" | "beach"
+export type PossibleTracks = "rain" | "birds" | "thunder" | "volcano" | "wind" | "beach"
 
 type Sounds = {
     rain: HTMLAudioElement,
@@ -35,7 +36,17 @@ const stop = (track: PossibleTracks) => {
     sounds[track as keyof Sounds].pause();
 }
 
-const Naturesounds = () => {
+const parseStyles = ({ position, dimensions, colour }: any) => {
+    return {
+        marginLeft: position[0].toString() + "px",
+        marginTop: position[1].toString() + "px",
+        width: dimensions[0].toString() + "px",
+        height: dimensions[1].toString() + "px",
+        backgroundColor: colour
+    }
+}
+
+const Naturesounds: React.FC<SoundsInfo> = ({ type, editable, ...styles }) => {
 
     const [isPlaying, setIsPlaying] = useState<string[]>([]);
     const togglePlay = (item: PossibleTracks) => {
@@ -49,14 +60,7 @@ const Naturesounds = () => {
     }
 
     return (
-        <div className="rain resize-drag">
-            <button onClick={() => togglePlay("rain")}>Toggle rain</button>
-            <button onClick={() => togglePlay("birds")}>Toggle birds</button>
-            <button onClick={() => togglePlay("beach")}>Toggle beach</button>
-            <button onClick={() => togglePlay("thunder")}>Toggle thunder</button>
-            <button onClick={() => togglePlay("volcano")}>Toggle volcano</button>
-            <button onClick={() => togglePlay("wind")}>Toggle wind</button>
-        </div>
+        <button className={editable ? "resize-drag" : ""} onClick={() => togglePlay(type)} style={parseStyles(styles)}>Toggle {type}</button>
     );
 };
 

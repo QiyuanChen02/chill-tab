@@ -1,0 +1,16 @@
+@use "../abstracts" as a;
+
+@mixin modal($width) {
+	@include a.center();
+	width: $width;
+	z-index: a.z-index(modal);
+	border-radius: var(--space-sm);
+	background-color: var(--background-color-1);
+	border: 1px solid black;
+
+	@include a.media("<=tablet") {
+		width: 100%;
+		height: 100%;
+		border-radius: 0;
+	}
+}

@@ -14,7 +14,10 @@ const Authproviders = () => {
     }
 
     return (
-        <button onClick={signInWithGoogle}>Sign in</button>
+        <>
+            <p>Or sign in with google</p>
+            <button onClick={signInWithGoogle}>Sign in</button>
+        </>
     );
 };
 

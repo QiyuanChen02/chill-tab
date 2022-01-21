@@ -1,0 +1,37 @@
+@mixin button1($font-size, $height, $width, $inverted: false){
+    display: block;
+    border: 2px solid var(--accent-color);
+    font-size: var(--text-#{$font-size});
+    font-weight: bold;
+    cursor: pointer;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 10em;
+    width: $width;
+    height: calc(#{$height} + 2 * var(--space-sm));
+
+    @if $inverted {
+        color: var(--accent-color);
+        background-color: var(--background-color-1);
+    } @else {
+        color: var(--background-color-1);
+        background-color: var(--accent-color);
+    }
+
+    &:hover, &:focus {
+        filter: brightness(90%);
+    }
+}
+
+@mixin button2($width){
+    width: $width;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    color: var(--background-color-1);
+
+    &:hover {
+        filter: brightness(90%);
+    }
+}

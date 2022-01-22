@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SoundsInfo } from './canvas';
+import { SoundsInfo } from '../types/canvascomponents';
 
 const audio = (track: string) => {
     const sound = new Audio(track)

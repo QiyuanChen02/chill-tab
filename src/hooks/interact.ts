@@ -58,7 +58,7 @@ const dragSettings = {
 };
 
 const resizeSettings = {
-	// resize from all edges and corners
+
 	edges: { left: true, right: true, bottom: true, top: true },
 
 	inertia: true,
@@ -88,4 +88,6 @@ export function useInteract() {
 
 		return () => interact(".resize-drag").unset();
 	}, []);
+
+	//Return dimension details
 }

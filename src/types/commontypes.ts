@@ -1,7 +1,5 @@
 import React from "react";
 
-type Children = {
+export type Children = {
 	children: React.ReactNode;
 };
-
-export type { Children };

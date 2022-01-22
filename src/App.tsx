@@ -21,10 +21,9 @@ function Webpage() {
         <PrivateRoute>
           <Outlet />
         </PrivateRoute>
-      } >
+      }>
         <Route index element={<Dashboard />} />
-        <Route path=":project" element={<Edit />} />
-        <Route path="*" element={<h1>No project with that name sorry</h1>} />
+        <Route path=":projectId" element={<Edit />} />
       </Route>
       <Route path="*" element={<h1>404 not found</h1>} />
     </Routes>

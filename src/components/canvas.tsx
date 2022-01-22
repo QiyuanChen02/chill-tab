@@ -1,75 +1,44 @@
+import { doc } from 'firebase/firestore';
 import React from 'react';
+import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import { useParams } from 'react-router-dom';
+import { db } from '../config/firebase';
 import { useInteract } from '../hooks/interact';
-import Naturesounds, { PossibleTracks } from './naturesounds';
+import { EmbedsInfo, SoundsInfo } from '../types/canvascomponents';
+import Naturesounds from './naturesounds';
 import Spotify from './spotify';
 
-export type SoundsInfo = {
-    type: PossibleTracks,
-    position: [number, number],
-    dimensions: [number, number],
-    colour: string,
-    editable?: boolean
+
+type Props = {
+    editable: boolean;
 }
 
-export type EmbedsInfo = {
-    type: string,
-    position: [number, number],
-    dimensions: [number, number],
-}
+const Canvas: React.FC<Props> = ({ editable }) => {
 
-type CanvasInfo = {
-    size: [number, number],
-    sounds: SoundsInfo[],
-    embeds: EmbedsInfo[]
-}
-
-const canvasInfo: CanvasInfo = {
-    size: [500, 500],
-    sounds: [
-        {
-            type: "rain",
-            position: [100, 100],
-            dimensions: [100, 100],
-            colour: "#FF0000"
-        },
-        {
-            type: "volcano",
-            position: [800, 800],
-            dimensions: [200, 200],
-            colour: "#FFFF00"
-        },
-        {
-            type: "volcano",
-            position: [500, 100],
-            dimensions: [200, 200],
-            colour: "#FFFF00"
-        }
-    ],
-    embeds: [
-        {
-            type: "spotify",
-            position: [500, 500],
-            dimensions: [200, 300]
-        }
-    ]
-}
-
-const Canvas = ({ editable }: any) => {
+    useInteract();
 
     //Get data
-    
+    const params = useParams();
+    const projectRef = doc(db, "projects", params.projectId || "0JZCMQSuG6me4rpF8ABU");
+    const [canvasInfo, loading] = useDocumentDataOnce(projectRef);
 
-    useInteract()
-    return (
-        <section className="canvas" style={{ width: "500px", height: "500px" }}>
-            {canvasInfo.sounds.map(sound => (
-                <Naturesounds editable={editable} {...sound} />
-            ))}
-            {canvasInfo.embeds.map(embed => (
-                <Spotify editable={editable} {...embed} />
-            ))}
-        </section>
-    );
+    if (loading) {
+        return <h1>Loading...</h1>
+    }
+    else if (!canvasInfo) {
+        return <h1>No data...</h1>
+    } else {
+        return (
+            <section className="canvas" style={{ width: "500px", height: "500px" }}>
+                {canvasInfo.sounds.map((sound: SoundsInfo) => (
+                    <Naturesounds key={sound.id} editable={editable} {...sound} />
+                ))}
+                {canvasInfo.embeds.map((embed: EmbedsInfo) => (
+                    <Spotify key={embed.id} editable={editable} {...embed} />
+                ))}
+            </section>
+        );
+    }
 };
 
 export default Canvas;

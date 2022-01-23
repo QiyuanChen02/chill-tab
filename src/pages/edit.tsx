@@ -9,7 +9,7 @@ const Edit = () => {
             <h1>EDIT PAGE:</h1>
             <button>Add stuff</button>
             <button>Save</button>
-            <Canvas editable={true}/>
+            {/* <Canvas editable={true}/> */}
         </div>
     )
 }

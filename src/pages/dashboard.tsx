@@ -1,44 +1,15 @@
 import { addDoc, collection, query, where } from 'firebase/firestore';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { auth, db } from '../config/firebase';
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { nanoid } from 'nanoid'
 
 const emptyProject = {
     creator: "qiyuan.chen2002@gmail.com",
     size: [500, 500],
-    sounds: [
-        {
-            id: nanoid(),
-            type: "rain",
-            position: [100, 100],
-            dimensions: [100, 100],
-            colour: "#FF0000"
-        },
-        {
-            id: nanoid(),
-            type: "volcano",
-            position: [800, 800],
-            dimensions: [200, 200],
-            colour: "#FFFF00"
-        },
-        {
-            id: nanoid(),
-            type: "volcano",
-            position: [500, 100],
-            dimensions: [200, 200],
-            colour: "#FFFF00"
-        }
-    ],
-    embeds: [
-        {
-            type: "spotify",
-            position: [500, 500],
-            dimensions: [200, 300]
-        }
-    ]
+    sounds: [],
+    embeds: []
 }
 
 const Dashboard = () => {

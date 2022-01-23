@@ -1,9 +1,9 @@
 @use "../abstracts" as a;
 
 .canvas {
-	@include a.center();
 	width: 100vw;
 	height: 100vh;
+	z-index: a.z-index(canvas);
 	background-color: azure;
 
 	> * {

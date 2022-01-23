@@ -1,6 +1,8 @@
 $z-index: (
+	loading: 150,
 	modal: 100,
 	overlay: 50,
+	canvas: 0,
 );
 
 @function z-index($key) {

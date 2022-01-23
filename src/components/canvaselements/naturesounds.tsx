@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SoundsInfo } from '../types/canvascomponents';
+import { PossibleTracks, SoundsInfo } from '../../types/canvascomponents';
 
 const audio = (track: string) => {
     const sound = new Audio(track)
@@ -7,8 +7,6 @@ const audio = (track: string) => {
     sound.volume = 0.6;
     return sound;
 }
-
-export type PossibleTracks = "rain" | "birds" | "thunder" | "volcano" | "wind" | "beach"
 
 type Sounds = {
     rain: HTMLAudioElement,
@@ -46,7 +44,7 @@ const parseStyles = ({ position, dimensions, colour }: any) => {
     }
 }
 
-const Naturesounds: React.FC<SoundsInfo> = ({ type, editable, ...styles }) => {
+const Naturesounds: React.FC<SoundsInfo> = ({ type, styles }) => {
 
     const [isPlaying, setIsPlaying] = useState<string[]>([]);
     const togglePlay = (item: PossibleTracks) => {
@@ -60,7 +58,7 @@ const Naturesounds: React.FC<SoundsInfo> = ({ type, editable, ...styles }) => {
     }
 
     return (
-        <button className={editable ? "resize-drag" : ""} onClick={() => togglePlay(type)} style={parseStyles(styles)}>Toggle {type}</button>
+        <button onClick={() => togglePlay(type)} style={parseStyles(styles)}>Toggle {type}</button>
     );
 };
 

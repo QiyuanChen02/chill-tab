@@ -45,7 +45,6 @@ const Loginscreen: React.FC<Props> = ({ updateLoginModal }) => {
                     </div>
                 </form>
                 <Authproviders />
-                <p>Don't have an account? Sign in</p>
             </section>
             <div className="overlay" onClick={updateLoginModal} />
         </>

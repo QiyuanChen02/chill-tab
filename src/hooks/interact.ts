@@ -58,7 +58,6 @@ const dragSettings = {
 };
 
 const resizeSettings = {
-
 	edges: { left: true, right: true, bottom: true, top: true },
 
 	inertia: true,
@@ -80,14 +79,14 @@ const resizeSettings = {
 	],
 };
 
-export function useInteract() {
+export function useInteract(editable: boolean) {
 	useEffect(() => {
-		interact(".resize-drag")
-			.draggable(dragSettings)
-			.resizable(resizeSettings);
+		if (editable) {
+			interact(".resize-drag")
+				.draggable(dragSettings)
+				.resizable(resizeSettings);
+		}
 
 		return () => interact(".resize-drag").unset();
-	}, []);
-
-	//Return dimension details
+	}, [editable]);
 }

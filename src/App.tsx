@@ -32,13 +32,7 @@ function Webpage() {
 
 const PrivateRoute: React.FC<Children> = ({ children }) => {
   const [user, loading] = useAuthState(auth);
-
-  if (!loading) {
-    return user ? <> {children} </> : <Navigate to="/" />;
-  } else {
-    return <h1>I am loading</h1>
-  }
-
+  return !loading && user ? <> {children} </> : <Navigate to="/" />;
 }
 
 export default App;

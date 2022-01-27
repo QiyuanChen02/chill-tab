@@ -1,10 +1,9 @@
 import { doc } from 'firebase/firestore';
 import React from 'react';
-import { useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
-import { useParams } from 'react-router-dom';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { db } from '../config/firebase';
 import { useInteract } from '../hooks/interact';
-import { CanvasInfo, EmbedsInfo, SoundsInfo } from '../types/canvascomponents';
+import { EmbedsInfo, SoundsInfo } from '../types/canvascomponents';
 import Naturesounds from './canvaselements/naturesounds';
 import Spotify from './canvaselements/spotify';
 import Loading from './loading';
@@ -14,11 +13,13 @@ type Props = {
     editable: boolean;
 }
 
-//todo: remove 'editable'
 const Canvas: React.FC<Props> = ({ projectId, editable }) => {
 
     useInteract(editable);
     const [projectData, loadingProject] = useDocumentData<any>(doc(db, "projects", projectId));
+
+    //takes the new project data and saves it into firestore
+    //const [modifiedProject, setModifiedProject]
 
     if (loadingProject) {
         return (
@@ -28,7 +29,7 @@ const Canvas: React.FC<Props> = ({ projectId, editable }) => {
         )
     } else {
         return (
-            <section className="canvas">
+            <section className={`canvas ${editable && "editable"}`}>
                 {projectData.sounds.map((sound: SoundsInfo) => (
                     <Naturesounds key={sound.id} {...sound} />
                 ))}

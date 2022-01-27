@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { CanvasInfo } from "../types/canvascomponents";
 
+//This canvas is displayed to the user when they are not logged in/have not picked a canvas
 const defaultCanvas: CanvasInfo = {
 	name: "Basic canvas",
 	creator: null,

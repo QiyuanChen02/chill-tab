@@ -3,16 +3,16 @@ import { useEffect } from "react";
 
 function dragMoveListener(event: { target: any; dx: number; dy: number }) {
 	const target = event.target;
-	// keep the dragged position in the data-x/data-y attributes
-	const x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
-	const y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
+	const marginTop = target.style.marginTop;
+	const marginLeft = target.style.marginLeft;
+	const x =
+		parseFloat(marginLeft.substring(0, marginTop.length - 2)) + event.dx;
+	const y =
+		parseFloat(marginTop.substring(0, marginTop.length - 2)) + event.dy;
 
-	// translate the element
-	target.style.transform = "translate(" + x + "px, " + y + "px)";
-
-	// update the posiion attributes
-	target.setAttribute("data-x", x);
-	target.setAttribute("data-y", y);
+	// update the position attributes
+	target.style.marginLeft = x + "px";
+	target.style.marginTop = y + "px";
 }
 
 function resizeListener(event: {
@@ -21,8 +21,12 @@ function resizeListener(event: {
 	deltaRect: { left: number; top: number };
 }) {
 	const target = event.target;
-	let x = parseFloat(target.getAttribute("data-x")) || 0;
-	let y = parseFloat(target.getAttribute("data-y")) || 0;
+
+	const marginTop = target.style.marginTop;
+	const marginLeft = target.style.marginLeft;
+
+	let x = parseFloat(marginLeft.substring(0, marginTop.length - 2));
+	let y = parseFloat(marginTop.substring(0, marginTop.length - 2));
 
 	// update the element's style
 	target.style.width = event.rect.width + "px";
@@ -32,10 +36,9 @@ function resizeListener(event: {
 	x += event.deltaRect.left;
 	y += event.deltaRect.top;
 
-	target.style.transform = "translate(" + x + "px," + y + "px)";
-
-	target.setAttribute("data-x", x);
-	target.setAttribute("data-y", y);
+	// update the position attributes
+	target.style.marginLeft = x + "px";
+	target.style.marginTop = y + "px";
 }
 
 const dragSettings = {
@@ -79,6 +82,7 @@ const resizeSettings = {
 	],
 };
 
+//Makes all code draggable
 export function useInteract(editable: boolean) {
 	useEffect(() => {
 		if (editable) {

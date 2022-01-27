@@ -1,7 +1,6 @@
 import React from 'react';
 import { auth } from '../config/firebase';
 import { signOut } from 'firebase/auth';
-import { useAuthModals } from '../hooks/auth';
 
 const Signout = () => {
 
@@ -18,7 +17,7 @@ const Signin = ({ updateLoginModal, updateSignupModal }: any) => {
 
     return (
         <>
-            <button onClick={updateLoginModal}>Login In</button>
+            <button onClick={updateLoginModal}>Log in</button>
             <button onClick={updateSignupModal}>Sign Up</button>
         </>
     );

@@ -6,11 +6,17 @@
 	z-index: a.z-index(canvas);
 	background-color: azure;
 
+	// > * refers to element container and > * > * refers to the elements inside the element container
 	> * {
 		position: absolute;
 	}
 
-	.resize-drag * {
+	> * > * {
+		width: 100%;
+		height: 100%;
+	}
+
+	&.editable > * > * {
 		pointer-events: none;
 	}
 }

@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import React from 'react';
 import Loginscreen from '../auth/loginscreen';
 import { Signout, Signin } from '../auth/authbuttons';
 import Signupscreen from '../auth/signupscreen';
 import Canvas from '../components/canvas';
-import { auth, db } from '../config/firebase';
+import { db } from '../config/firebase';
 import { useAuthModals } from '../hooks/auth';
 import { doc } from 'firebase/firestore';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { User } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import Loading from '../components/loading';
+import { GetUserContext } from '../auth/authcontext';
 
 const Index = () => {
 
-    const [user, loading] = useAuthState(auth);
+    const [user, loading] = GetUserContext();
     if (!loading) {
         return user ? <IndexLoggedIn user={user} /> : <IndexLoggedOut />
     } else {
@@ -42,21 +42,13 @@ const IndexLoggedIn = ({ user }: { user: User }) => {
 const IndexLoggedOut = () => {
 
     const authModals = useAuthModals();
+    const { updateLoginModal, updateSignupModal, loginModal, signupModal } = authModals;
     return (
         <>
             <Canvas projectId={"default"} editable={false} />
             <nav className="index-nav">
                 <Signin {...authModals} />
             </nav>
-            <AuthModals {...authModals} />
-        </>
-    )
-}
-
-const AuthModals = ({ updateLoginModal, updateSignupModal, loginModal, signupModal }: any) => {
-
-    return (
-        <>
             {signupModal && <Signupscreen updateSignupModal={updateSignupModal} />}
             {loginModal && <Loginscreen updateLoginModal={updateLoginModal} />}
         </>

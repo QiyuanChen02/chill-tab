@@ -1,27 +1,56 @@
 import { addDoc, collection, query, where } from 'firebase/firestore';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { auth, db } from '../config/firebase';
+import { db } from '../config/firebase';
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { User } from 'firebase/auth';
+import { nanoid } from 'nanoid';
 
 const emptyProject = {
     creator: "qiyuan.chen2002@gmail.com",
-    size: [500, 500],
-    sounds: [],
-    embeds: []
+    name: "Basic canvas",
+    size: [800, 500],
+    sounds: [
+        {
+            id: nanoid(),
+            type: "rain",
+            styles: {
+                position: [100, 100],
+                dimensions: [100, 100],
+                colour: "#FF0000",
+            },
+        },
+        {
+            id: nanoid(),
+            type: "volcano",
+            styles: {
+                position: [500, 100],
+                dimensions: [200, 200],
+                colour: "#FFFF00",
+            },
+        },
+    ],
+    embeds: [
+        {
+            id: nanoid(),
+            type: "spotify",
+            styles: {
+                position: [500, 400],
+                dimensions: [200, 100],
+                colour: null,
+            },
+        },
+    ],
 }
 
-const Dashboard = () => {
-
-    const [user] = useAuthState(auth);
+const Dashboard = ({ user }: { user: User }) => {
 
     const createNewDesign = async () => {
         await addDoc(collection(db, "projects"), emptyProject)
     }
 
     const projectsRef = collection(db, "projects");
-    const q = query(projectsRef, where("creator", "==", user!.email))
+    const q = query(projectsRef, where("creator", "==", user.email));
     const [projects] = useCollectionData(q, { idField: "id" });
 
     return (

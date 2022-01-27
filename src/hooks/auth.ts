@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+//Fetches the login and signup modals when 'login' and 'signup' button clicked
 export function useAuthModals() {
 	const [signupModal, setSignupModal] = useState(false);
 	const updateSignupModal = () => {

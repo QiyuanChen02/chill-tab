@@ -58,7 +58,10 @@ const Naturesounds: React.FC<SoundsInfo> = ({ type, styles }) => {
     }
 
     return (
-        <button onClick={() => togglePlay(type)} style={parseStyles(styles)}>Toggle {type}</button>
+        <div className="naturesounds resize-drag" style={parseStyles(styles)}>
+            <button className="resize-drag" onClick={() => togglePlay(type)}>Toggle {type}</button>
+        </div>
+
     );
 };
 

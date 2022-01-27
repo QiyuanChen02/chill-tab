@@ -44,7 +44,7 @@ const parseStyles = ({ position, dimensions, colour }: any) => {
     }
 }
 
-const Naturesounds: React.FC<SoundsInfo> = ({ type, styles }) => {
+const Naturesounds: React.FC<SoundsInfo & {i: number}> = ({ i, type, styles }) => {
 
     const [isPlaying, setIsPlaying] = useState<string[]>([]);
     const togglePlay = (item: PossibleTracks) => {

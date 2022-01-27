@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 function dragMoveListener(event: { target: any; dx: number; dy: number }) {
 	const target = event.target;
-	const marginTop = target.style.marginTop;
+	const marginTop = target.style.marginTop; //needs the state
 	const marginLeft = target.style.marginLeft;
 	const x =
 		parseFloat(marginLeft.substring(0, marginTop.length - 2)) + event.dx;

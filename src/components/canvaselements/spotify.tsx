@@ -1,4 +1,5 @@
 import React from 'react';
+import { Rnd } from 'react-rnd';
 import { EmbedsInfo } from '../../types/canvascomponents';
 
 const parseStyles = ({ position, dimensions }: any) => {
@@ -10,9 +11,27 @@ const parseStyles = ({ position, dimensions }: any) => {
     }
 }
 
-const Spotify: React.FC<EmbedsInfo & { i: number }> = ({ i, type, styles }) => { //type = spotify
+const Spotify: React.FC<EmbedsInfo & any> = ({ metadata, styles }) => { //type = spotify
     return (
-        <div className="spotify resize-drag" style={parseStyles(styles)}>
+
+    //     <Rnd
+    //   size={{ width: width, height: height }}
+    //   position={{ x: x, y: y }}
+    //   onDragStop={(e, d) => {
+    //     setx(d.x);
+    //     sety(d.y);
+    //   }}
+    //   onResize={(e, direction, ref, delta, position) => {
+    //     setWidth(ref.style.width);
+    //     setHeight(ref.style.height);
+    //     setx(x + position.x);
+    //     sety(Math.round(y + position.y));
+    //   }}
+    //   minWidth={"50px"}
+    // >
+    //   {width} {height} {x} {y}
+    // </Rnd>
+        <div className="spotify" style={parseStyles(styles)}>
             <iframe title="spotify" src="https://open.spotify.com/embed/playlist/471N195f5jAVs086lzYglw?utm_source=generator" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
         </div>
     );

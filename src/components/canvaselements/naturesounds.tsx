@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Rnd } from 'react-rnd';
 import { PossibleTracks, SoundsInfo } from '../../types/canvascomponents';
 
 const audio = (track: string) => {
@@ -44,7 +45,28 @@ const parseStyles = ({ position, dimensions, colour }: any) => {
     }
 }
 
-const Naturesounds: React.FC<SoundsInfo & {i: number}> = ({ i, type, styles }) => {
+const Naturesounds: React.FC<SoundsInfo & any> = ({ id, styles, metadata, setEditedSounds }) => {
+
+    const [currentStyles, setCurrentStyles] = useState(styles);
+    const [currentData, setCurrentData] = useState(metadata);
+
+    useEffect(() => {
+        if (currentData && currentStyles) {
+
+            setEditedSounds((editedSounds: any) => {
+                console.log(editedSounds);
+                const matchingSounds = editedSounds.filter((sound: any) => sound.id === id);
+                if (matchingSounds.length === 0) {
+                    return [...editedSounds, { id, currentStyles, currentData }]
+                } else if (matchingSounds.length === 1) {
+                    return [...editedSounds].map((sound: any) => sound.id === id ? { id, currentStyles, currentData } : sound)
+                } else {
+                    console.log("Error: shouldn't have more than 1 array with same id");
+                    return [];
+                }
+            });
+        }
+    }, [currentStyles, currentData])
 
     const [isPlaying, setIsPlaying] = useState<string[]>([]);
     const togglePlay = (item: PossibleTracks) => {
@@ -58,10 +80,34 @@ const Naturesounds: React.FC<SoundsInfo & {i: number}> = ({ i, type, styles }) =
     }
 
     return (
-        <div className="naturesounds resize-drag" style={parseStyles(styles)}>
-            <button className="resize-drag" onClick={() => togglePlay(type)}>Toggle {type}</button>
-        </div>
-
+        <>
+            {/* <Rnd
+                size={{ width: currentStyles.dimensions[0], height: currentStyles.dimensions[1] }}
+                position={{ x: currentStyles.position[0], y: currentStyles.position[1] }}
+                onDragStop={(e, d) => {
+                    setCurrentStyles((currentStyles: any) => {
+                        return {
+                            ...currentStyles,
+                            position: [d.x, d.y]
+                        }
+                    });
+                }}
+                onResizeStop={(e, direction, ref, delta, position) => {
+                    setCurrentStyles((currentStyles: any) => {
+                        return {
+                            ...currentStyles,
+                            dimensions: [ref.style.width, ref.style.height],
+                            position: [position.x, position.y] //possibly needs rounding
+                        }
+                    });
+                }}
+                minWidth={"50px"}
+                disableDragging={true}
+            >
+                <button onClick={() => togglePlay(currentData.type)}>Toggle {currentData.type}</button>
+            </Rnd> */}
+            <button onClick={() => togglePlay(currentData.type)}>Toggle {currentData.type}</button>
+        </>
     );
 };
 

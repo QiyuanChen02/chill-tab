@@ -9,7 +9,9 @@ const defaultCanvas: CanvasInfo = {
 	sounds: [
 		{
 			id: nanoid(),
-			type: "rain",
+			metadata: {
+				type: "rain",
+			},
 			styles: {
 				position: [100, 100],
 				dimensions: [100, 100],
@@ -18,7 +20,9 @@ const defaultCanvas: CanvasInfo = {
 		},
 		{
 			id: nanoid(),
-			type: "volcano",
+			metadata: {
+				type: "volcano",
+			},
 			styles: {
 				position: [500, 100],
 				dimensions: [200, 200],
@@ -29,7 +33,10 @@ const defaultCanvas: CanvasInfo = {
 	embeds: [
 		{
 			id: nanoid(),
-			type: "spotify",
+			metadata: {
+				type: "spotify",
+			},
+		
 			styles: {
 				position: [500, 400],
 				dimensions: [200, 100],

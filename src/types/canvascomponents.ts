@@ -13,24 +13,27 @@ export type PossibleTracks =
 
 export type SoundsInfo = {
 	id: string;
-	type: PossibleTracks;
+	metadata: {
+		type: PossibleTracks;
+	};
 	styles: {
+		colour: string;
 		position: [number, number];
 		dimensions: [number, number];
-		colour: string;
 	};
 	editable?: boolean;
 };
 
 export type EmbedsInfo = {
 	id: string;
-	type: string;
+	metadata: {
+		type: string;
+	};
 	styles: {
+		colour: null;
 		position: [number, number];
 		dimensions: [number, number];
-		colour: null;
 	};
-	editable?: boolean;
 };
 
 export type CanvasInfo = {

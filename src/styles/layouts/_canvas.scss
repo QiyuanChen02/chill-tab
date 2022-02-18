@@ -11,8 +11,12 @@
 		position: absolute;
 	}
 
-	button {
+	> * > *:not(div) {
 		width: 100%;
 		height: 100%;
+	}
+
+	&.editable > * > *:not(div) {
+		pointer-events: none;
 	}
 }

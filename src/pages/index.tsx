@@ -26,17 +26,20 @@ const IndexLoggedIn = ({ user }: { user: User }) => {
 
     const [userData, loadingUser] = useDocumentData<any>(doc(db, "users", user.uid));
 
-    return (
-        <>
-            {!loadingUser ? <Canvas projectId={userData.selectedProject} editable={false} /> : <Loading>
-                <h1>Loading User data</h1>
-            </Loading>}
-            <nav className="index-nav">
-                <Link to="/dashboard">Go to dashboard</Link>
-                <Signout />
-            </nav>
-        </>
-    )
+    if (loadingUser) {
+        return <h1>Loading user data</h1>
+    } else {
+        return (
+            <>
+                <Canvas projectId={userData.selectedProject} editable={false} />
+                <nav className="index-nav">
+                    <Link to="/dashboard">Go to dashboard</Link>
+                    <Signout />
+                </nav>
+            </>
+        )
+    }
+    
 }
 
 const IndexLoggedOut = () => {

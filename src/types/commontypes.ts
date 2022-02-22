@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react'
 
 export type Children = {
-	children: React.ReactNode;
-};
+    children: React.ReactNode
+}

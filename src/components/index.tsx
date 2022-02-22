@@ -1,2 +1,2 @@
-import Canvas from "./canvas";
-export { Canvas };
+import Canvas from './canvas'
+export { Canvas }

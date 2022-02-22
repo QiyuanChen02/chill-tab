@@ -1,61 +1,50 @@
-import React from 'react';
-import Loginscreen from '../auth/loginscreen';
-import { Signout, Signin } from '../auth/authbuttons';
-import Signupscreen from '../auth/signupscreen';
-import Canvas from '../components/canvas';
-import { db } from '../config/firebase';
-import { useAuthModals } from '../hooks/auth';
-import { doc } from 'firebase/firestore';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { User } from 'firebase/auth';
-import { Link } from 'react-router-dom';
-import Loading from '../components/loading';
-import { GetUserContext } from '../auth/authcontext';
+import React from 'react'
+import Loginscreen from '../auth/loginModal'
+import Signupscreen from '../auth/signupModal'
+import { Link } from 'react-router-dom'
+import { Button, Typography } from '@mui/material'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { toggleLogin, toggleSignup } from '../redux/auth'
 
 const Index = () => {
+    const userData = useAppSelector((state) => state.userData)
+    if (userData.loadingUser || userData.loadingData)
+        return <h1>Loading user auth</h1>
 
-    const [user, loading] = GetUserContext();
-    if (!loading) {
-        return user ? <IndexLoggedIn user={user} /> : <IndexLoggedOut />
-    } else {
-        return <Loading><h1>Loading user auth</h1></Loading>
-    }
+    return userData.uid ? <IndexLoggedIn /> : <IndexLoggedOut />
 }
 
-const IndexLoggedIn = ({ user }: { user: User }) => {
-
-    const [userData, loadingUser] = useDocumentData<any>(doc(db, "users", user.uid));
-
-    if (loadingUser) {
-        return <h1>Loading user data</h1>
-    } else {
-        return (
-            <>
-                <Canvas projectId={userData.selectedProject} editable={false} />
-                <nav className="index-nav">
-                    <Link to="/dashboard">Go to dashboard</Link>
-                    <Signout />
-                </nav>
-            </>
-        )
-    }
-    
-}
-
-const IndexLoggedOut = () => {
-
-    const authModals = useAuthModals();
-    const { updateLoginModal, updateSignupModal, loginModal, signupModal } = authModals;
+const IndexLoggedIn = () => {
     return (
         <>
-            <Canvas projectId={"default"} editable={false} />
-            <nav className="index-nav">
-                <Signin {...authModals} />
-            </nav>
-            {signupModal && <Signupscreen updateSignupModal={updateSignupModal} />}
-            {loginModal && <Loginscreen updateLoginModal={updateLoginModal} />}
+            {/* <Canvas projectId={userData.selectedProject} editable={false} /> */}
+            <Link to="/dashboard">Go to dashboard</Link>
         </>
     )
 }
 
-export default Index;
+const IndexLoggedOut = () => {
+    const dispatch = useAppDispatch()
+    return (
+        <>
+            <Button
+                onClick={() => dispatch(toggleLogin(true))}
+                color="primary"
+                variant="text"
+            >
+                Toggle Login
+            </Button>
+            <Button
+                onClick={() => dispatch(toggleSignup(true))}
+                color="secondary"
+                variant="text"
+            >
+                Toggle Signup
+            </Button>
+            <Signupscreen />
+            <Loginscreen />
+        </>
+    )
+}
+
+export default Index

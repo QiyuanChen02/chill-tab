@@ -74,6 +74,7 @@ const SignupModal = () => {
         dispatchSignup(setPassword(e.target.value))
     }
 
+    //refactor maybe?
     const signup = async () => {
         const { firstName, lastName, email, password } = state
         try {
@@ -94,14 +95,11 @@ const SignupModal = () => {
 
     useEffect(() => {
         if (
-            [
-                state.firstName,
-                state.lastName,
-                state.email,
-                state.password,
-            ].every((x) => !!x)
+            state.firstName.trim() &&
+            state.lastName.trim() &&
+            state.email.trim() &&
+            state.password.trim()
         ) {
-            //tests if all are truthy
             dispatchSignup(setIsButtonDisabled(false))
         } else {
             dispatchSignup(setIsButtonDisabled(true))

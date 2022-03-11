@@ -1,16 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../config/firebase'
 
 interface DataState {
-    data: {
-        email: string
-        projects: string[]
-        selectedProject: string | null
-    }
+    email: string
+    projects: string[]
+    selectedProject: string | null
 }
 
-interface UserDataState extends DataState {
+interface UserDataState {
+    data: DataState
     uid: string | null
     loadingUser: boolean
     loadingData: boolean
@@ -46,17 +45,17 @@ export const userDataSlice = createSlice({
     name: 'userData',
     initialState,
     reducers: {
-        setUid: (state: UserDataState, action: any) => {
+        setUid: (state: UserDataState, action: PayloadAction<string>) => {
             state.uid = action.payload
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUserData.fulfilled, (state, action: any) => {
-                state.data = action.payload
+            .addCase(fetchUserData.fulfilled, (state, action) => {
+                state.data = action.payload as DataState
             })
-            .addCase(fetchUserData.rejected, (state, action: any) => {
-                state.error = action.error.message
+            .addCase(fetchUserData.rejected, (state, action) => {
+                state.error = action.error.message as string | null
             })
     },
 })

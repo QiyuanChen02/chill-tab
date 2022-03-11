@@ -54,6 +54,7 @@ const LoginModal = () => {
         dispatchLogin(setPassword(e.target.value))
     }
 
+    //refactor maybe?
     const login = async () => {
         const { email, password } = state
         try {

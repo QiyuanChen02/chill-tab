@@ -75,14 +75,12 @@ const SignupModal = () => {
     }
 
     //refactor maybe?
-    const signup = async () => {
+    const signup = () => {
         const { firstName, lastName, email, password } = state
         try {
-            const uid = await dispatch(
+            dispatch(
                 handleSignup({ firstName, lastName, email, password })
-            ).unwrap()
-            dispatch(setUid(uid))
-            dispatch(fetchUserData(uid))
+            )
         } catch (e: any) {
             console.log(e.message)
         }

@@ -18,7 +18,7 @@ interface UserDataState {
 
 const initialState: UserDataState = {
     uid: null,
-    loadingUser: false,
+    loadingUser: true,
     loadingData: false,
     error: null,
     data: {
@@ -45,16 +45,25 @@ export const userDataSlice = createSlice({
     name: 'userData',
     initialState,
     reducers: {
-        setUid: (state: UserDataState, action: PayloadAction<string>) => {
+        setUid: (
+            state: UserDataState,
+            action: PayloadAction<string | null>
+        ) => {
+            state.loadingUser = false
             state.uid = action.payload
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchUserData.fulfilled, (state, action) => {
+                state.loadingData = false
                 state.data = action.payload as DataState
             })
+            .addCase(fetchUserData.pending, (state) => {
+                state.loadingData = true
+            })
             .addCase(fetchUserData.rejected, (state, action) => {
+                state.loadingData = false
                 state.error = action.error.message as string | null
             })
     },

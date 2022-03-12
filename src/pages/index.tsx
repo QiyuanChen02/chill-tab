@@ -5,20 +5,31 @@ import { Link } from 'react-router-dom'
 import { Button, Typography } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { toggleLogin, toggleSignup } from '../redux/auth'
+import { getAuth } from 'firebase/auth'
+import ProjectDisplay from '../components/projectDisplay'
 
 const Index = () => {
     const userData = useAppSelector((state) => state.userData)
     if (userData.loadingUser || userData.loadingData)
-        return <h1>Loading user auth</h1>
+        return <Typography>Loading user auth</Typography>
 
     return userData.uid ? <IndexLoggedIn /> : <IndexLoggedOut />
 }
 
 const IndexLoggedIn = () => {
+
+    const auth = getAuth()
     return (
         <>
-            {/* <Canvas projectId={userData.selectedProject} editable={false} /> */}
+            <ProjectDisplay />
             <Link to="/dashboard">Go to dashboard</Link>
+            <Button
+                onClick={() => auth.signOut()}
+                color="primary"
+                variant="text"
+            >
+                Signout
+            </Button>
         </>
     )
 }

@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { PossibleTracks, SoundsInfo } from '../../types/canvascomponents'
@@ -5,7 +6,7 @@ import { PossibleTracks, SoundsInfo } from '../../types/canvascomponents'
 const audio = (track: string) => {
     const sound = new Audio(track)
     sound.loop = true
-    sound.volume = 0.6
+    sound.volume = 1
     return sound
 }
 
@@ -35,49 +36,14 @@ const stop = (track: PossibleTracks) => {
     sounds[track as keyof Sounds].pause()
 }
 
-type Props = SoundsInfo & {
-    setEditedSounds: any
-}
-
-const Naturesounds: React.FC<Props> = ({
+type Props = SoundsInfo
+const Naturesounds: React.FC<SoundsInfo> = ({
     id,
     styles,
-    metadata,
-    setEditedSounds,
+    metadata
 }) => {
     const [currentStyles, setCurrentStyles] = useState(styles)
     const [currentData, setCurrentData] = useState(metadata)
-
-    useEffect(() => {
-        if (currentData && currentStyles) {
-            setEditedSounds((sounds: SoundsInfo[]) => {
-                const matchingSounds = sounds.filter(
-                    (sound: SoundsInfo) => sound.id === id
-                )
-                if (matchingSounds.length === 0) {
-                    return [
-                        ...sounds,
-                        { id, styles: currentStyles, metadata: currentData },
-                    ]
-                } else if (matchingSounds.length === 1) {
-                    return [...sounds].map((sound: SoundsInfo) =>
-                        sound.id === id
-                            ? {
-                                  id,
-                                  styles: currentStyles,
-                                  metadata: currentData,
-                              }
-                            : sound
-                    )
-                } else {
-                    console.log(
-                        "Error: shouldn't have more than 1 array with same id"
-                    )
-                    return []
-                }
-            })
-        }
-    }, [currentStyles, currentData, id, setEditedSounds])
 
     const [isPlaying, setIsPlaying] = useState<string[]>([])
     const togglePlay = (item: PossibleTracks) => {
@@ -118,10 +84,12 @@ const Naturesounds: React.FC<Props> = ({
                 })
             }}
             minWidth={'50px'}
+            disableDragging={true}
+            disableResizing={true}
         >
-            <button onClick={() => togglePlay(currentData.type)}>
+            <Button variant="contained" onClick={() => togglePlay(currentData.type)}>
                 Toggle {currentData.type}
-            </button>
+            </Button>
         </Rnd>
     )
 }

@@ -55,14 +55,10 @@ const LoginModal = () => {
     }
 
     //refactor maybe?
-    const login = async () => {
+    const login = () => {
         const { email, password } = state
         try {
-            const uid = await dispatch(
-                handleLogin({ email, password })
-            ).unwrap()
-            dispatch(setUid(uid))
-            dispatch(fetchUserData(uid))
+            dispatch(handleLogin({ email, password }))
         } catch (e: any) {
             console.log(e.message)
         }

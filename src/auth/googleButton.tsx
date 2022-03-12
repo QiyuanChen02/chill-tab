@@ -39,11 +39,9 @@ const styles = {
 function MyGoogleLoginButton() {
     const dispatch = useAppDispatch()
 
-    const signupWithGoogle = async () => {
+    const signupWithGoogle = () => {
         try {
-            const uid = await dispatch(googleSignup()).unwrap()
-            dispatch(setUid(uid))
-            dispatch(fetchUserData(uid))
+            dispatch(googleSignup())
         } catch (e: any) {
             console.log(e.message)
         }
@@ -70,8 +68,8 @@ function Icon() {
             viewBox="0 0 64 64"
             width={28}
             height={28}
-            //Hacky solution to add a white background to the svg, good enough for now, will make own button later
-            // style={{ backgroundColor: 'white', padding: 8, marginLeft: -9.9, borderRadius: 2 }}
+        //Hacky solution to add a white background to the svg, good enough for now, will make own button later
+        // style={{ backgroundColor: 'white', padding: 8, marginLeft: -9.9, borderRadius: 2 }}
         >
             <linearGradient
                 id="95yY7w43Oj6n2vH63j6HJb"

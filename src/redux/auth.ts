@@ -83,6 +83,7 @@ export const googleSignup = createAsyncThunk('auth/googleSignup', async () => {
     const result = await signInWithPopup(auth, provider)
     return result.user.uid
 })
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,

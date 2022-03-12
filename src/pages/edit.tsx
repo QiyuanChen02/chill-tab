@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Canvas from '../components/canvas'
 
 const Edit = () => {
     const params = useParams()
@@ -23,12 +22,6 @@ const Edit = () => {
             <button>Add stuff</button>
             <button onClick={() => save()}>Save</button>
             <Link to="../">Back to dashboard</Link>
-            <Canvas
-                projectId={params.projectId!}
-                editable={true}
-                canvasOperations={canvasOperations}
-                setCanvasOperations={setCanvasOperations}
-            />
         </div>
     )
 }

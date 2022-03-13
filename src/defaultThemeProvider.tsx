@@ -2,7 +2,6 @@ import React, { useContext, useMemo, useState } from 'react'
 import { createTheme } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import { green, purple } from '@mui/material/colors'
-import { Children } from './types/commontypes'
 
 type ColourModeContextType = {
     toggleColourMode: () => void
@@ -14,6 +13,9 @@ const ColourModeContext = React.createContext<ColourModeContextType>({
     mode: 'light',
 })
 
+export type Children = {
+    children: React.ReactNode
+}
 //Creates the theme and the colour mode (i.e light or dark)
 export const DefaultThemeProvider: React.FC<Children> = ({ children }) => {
     const [mode, setMode] = useState<'light' | 'dark'>('light')

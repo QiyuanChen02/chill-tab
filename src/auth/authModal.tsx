@@ -2,7 +2,7 @@ import { Box, IconButton, Modal, Theme, Typography } from '@mui/material'
 import { toggleLogin, toggleSignup } from '../redux/auth'
 import CloseIcon from '@mui/icons-material/Close'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
-import { Children } from '../types/commontypes'
+import { Children } from '../defaultThemeProvider'
 
 const modalStyle = (theme: Theme) => ({
     position: 'absolute' as const,
@@ -26,9 +26,10 @@ const AuthModal: React.FC<Children & { type: string }> = ({
 }) => {
     const loginModalOpen = useAppSelector((state) => state.auth.loginModal)
     const signupModalOpen = useAppSelector((state) => state.auth.signupModal)
+    const dispatch = useAppDispatch()
 
     const openModalType = type === 'login' ? loginModalOpen : signupModalOpen
-    const dispatch = useAppDispatch()
+
 
     const toggleModal = () => {
         type === 'login'

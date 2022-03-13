@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useAppDispatch } from '../hooks/reduxHooks'
 import { googleSignup } from '../redux/auth'
-import { fetchUserData, setUid } from '../redux/userData'
+import { fetchUserData, setUid } from '../redux/userData/userData'
 
 const buttonHeight = 56
 const styles = {

@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Rnd } from 'react-rnd'
-import { PossibleTracks, SoundsInfo } from '../../types/canvascomponents'
+import { PossibleTracks, Sound } from '../../redux/projectData/projectTypes'
 
 const audio = (track: string) => {
     const sound = new Audio(track)
@@ -36,8 +36,7 @@ const stop = (track: PossibleTracks) => {
     sounds[track as keyof Sounds].pause()
 }
 
-type Props = SoundsInfo
-const Naturesounds: React.FC<SoundsInfo> = ({
+const Naturesounds: React.FC<Sound> = ({
     id,
     styles,
     metadata
@@ -83,9 +82,7 @@ const Naturesounds: React.FC<SoundsInfo> = ({
                     }
                 })
             }}
-            minWidth={'50px'}
-            disableDragging={true}
-            disableResizing={true}
+            disableDragging={false}
         >
             <Button variant="contained" onClick={() => togglePlay(currentData.type)}>
                 Toggle {currentData.type}

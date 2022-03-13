@@ -6,12 +6,7 @@ export type PossibleTracks =
     | 'wind'
     | 'beach'
 
-//May be used in the future for styles
-// export type ComponentStyles = {
-
-// }
-
-export type SoundsInfo = {
+export interface Sound {
     id: string
     metadata: {
         type: PossibleTracks
@@ -21,10 +16,9 @@ export type SoundsInfo = {
         position: [number, number]
         dimensions: [number, number]
     }
-    editable?: boolean
 }
 
-export type EmbedsInfo = {
+export interface Embed {
     id: string
     metadata: {
         type: string
@@ -36,10 +30,15 @@ export type EmbedsInfo = {
     }
 }
 
-export type CanvasInfo = {
-    name: string
-    creator: string | null
-    size: [number, number]
-    sounds: SoundsInfo[]
-    embeds: EmbedsInfo[]
+export interface ProjectDataState {
+    projectId: string | null
+    loadingData: boolean
+    error: null | string
+    data: {
+        name: string
+        createdBy: null
+        size: [number, number]
+        sounds: Sound[]
+        embeds: Embed[]
+    }
 }

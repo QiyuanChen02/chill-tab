@@ -16,6 +16,7 @@
         "@types/react": "^17.0.38",
         "@types/react-dom": "^17.0.11",
         "firebase": "^9.6.3",
+        "html-to-image": "^1.9.0",
         "nanoid": "^3.3.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
@@ -32,7 +33,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "prettier": "prettier --write \"**/*.{ts,js,jsx}\""
+        "prettier": "prettier --write \"**/*.{ts,tsx}\""
     },
     "eslintConfig": {
         "extends": [

@@ -1,43 +1,38 @@
-import React, { useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import React from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { isExtension } from './helpers/helperfunctions'
 import Index from './pages/index'
 import Dashboard from './pages/dashboard'
 import Edit from './pages/edit'
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth'
-import { useAppDispatch } from './hooks/reduxHooks'
-import { fetchUserData, setUid } from './redux/userData'
+import { useAuthUser } from './hooks/authUserChange'
+import { Typography } from '@mui/material'
+import { useAppSelector } from './hooks/reduxHooks'
 
 function App() {
 
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
-            console.log(user)
-            if (user) {
-                dispatch(setUid(user.uid));
-                dispatch(fetchUserData(user.uid));
-            } else {
-                dispatch(setUid(null));
-            }
-        });
-        return () => unsubscribe()
-    }, [dispatch])
-
+    useAuthUser()
     return isExtension() ? <Index /> : <Webpage />
 }
 
 function Webpage() {
+
+    const uid = useAppSelector((state) => state.userData.uid)
     return (
         <Routes>
             <Route path="/" element={<Index />} />
             <Route path="dashboard">
-                <Route index element={<Dashboard />} />
-                <Route path=":projectId" element={<Edit />} />
+                {uid ?
+                    <>
+                        <Route index element={<Dashboard />} />
+                        <Route path=":projectId" element={<Edit />} />
+                    </>
+                    :
+                    <>
+                        <Route index element={<Navigate to="/" replace />} />
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </>}
             </Route>
-            <Route path="*" element={<h1>404 not found</h1>} />
+            <Route path="*" element={<Typography>404 not found</Typography>} />
         </Routes>
     )
 }

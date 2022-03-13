@@ -1,36 +1,87 @@
-import { addDoc, collection, query, where } from 'firebase/firestore'
-import React from 'react'
 import { Link } from 'react-router-dom'
-import { db } from '../config/firebase'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { User } from 'firebase/auth'
 import { nanoid } from 'nanoid'
-import { CanvasInfo } from '../types/canvascomponents'
+import { Box, Button, Typography, Card, CardMedia, CardContent, CardActions, CardActionArea } from '@mui/material'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { addNewProject } from '../redux/projectData/projectData'
+import { addProjectToUser } from '../redux/userData/userData'
 
 const Dashboard = () => {
 
+    const userData = useAppSelector((state) => state.userData)
+    const dispatch = useAppDispatch()
+
     const createNewDesign = async () => {
-        await addDoc(collection(db, "projects"), emptyProject)
-        console.log("Project created");
+        const uid = userData.uid
+        if (uid) {
+            const projectId = nanoid()
+            await dispatch(addProjectToUser({ uid, projectId }))
+            await dispatch(addNewProject(projectId))
+            console.log("Project created");
+        }
     }
 
-    const projectsRef = collection(db, "projects");
-    const q = query(projectsRef, where("creator", "==", user.uid));
-    const [projects, loading] = useCollectionData(q, { idField: "id" });
+    const projects = [...userData.data.projects].reverse()
 
-        return (
-            <section className="dashboard">
-                <h1>This is a dashboard</h1>
-                <Button onClick={createNewDesign}>New +</Button>
+    return (
+        <>
+            <Button onClick={createNewDesign}>New +</Button>
+            <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
                 {projects && projects.map(project => (
-                    <ProjectPreview key={project.id} id={project.id} />
+                    <ProjectPreview key={project.id} {...project} />
                 ))}
-            </section>
-        );
+            </Box>
+        </>
+    );
 }
 
-const ProjectPreview = ({ id }: any) => {
-    return <Link to={id}>Project: {id}</Link>
+// const Test = () => {
+//     const ref = useRef<HTMLDivElement>(null);
+//     const [url, setUrl] = useState<undefined | string>(undefined);
+//     const onButtonClick = useCallback(() => {
+//         if (ref.current === null) return
+
+//         toSvg(ref.current)
+//             .then((dataUrl) => {
+//                 setUrl(dataUrl);
+//             })
+//             .catch((err) => {
+//                 console.log(err);
+//             });
+//     }, [ref]);
+
+//     return (
+//         <>
+//             <div ref={ref} style={{ padding: "1px" }}>
+//                 <ProjectDisplay />
+//             </div>
+//             <button onClick={onButtonClick}>Click me</button>
+//             <img src={url} alt="im" />
+//         </>
+//     );
+// }
+
+const ProjectPreview = ({ id, name, image }: any) => {
+    return (
+        <Card sx={{ width: 300 }}>
+
+            <CardActionArea component={Link} to={`/dashboard/${id}`}>
+                <CardMedia
+                    component="img"
+                    height="140"
+                    image={image || "/img/blank.jpg"}
+                    alt="preview image"
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                        {name}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions>
+                <Button>Delete</Button>
+            </CardActions>
+        </Card>
+    )
 }
 
 export default Dashboard

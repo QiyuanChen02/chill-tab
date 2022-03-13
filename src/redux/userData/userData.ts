@@ -1,26 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../config/firebase'
-
-interface DataState {
-    email: string
-    projects: string[]
-    selectedProject: string | null
-}
-
-interface UserDataState {
-    data: DataState
-    uid: string | null
-    loadingUser: boolean
-    loadingData: boolean
-    error: string | null
-}
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { db } from '../../config/firebase'
+import { DataState, UserDataState } from './userTypes'
 
 const initialState: UserDataState = {
     uid: null,
     loadingUser: true,
     loadingData: false,
-    error: null,
+    error: undefined,
     data: {
         email: '',
         projects: [],
@@ -40,6 +27,34 @@ export const fetchUserData = createAsyncThunk(
         }
     }
 )
+
+export const addProjectToUser = createAsyncThunk(
+    'userData/addProject',
+    async (ids: { uid: string; projectId: string }) => {
+        const userDataRef = doc(db, 'users', ids.uid)
+        const projectToAdd = {
+            id: ids.projectId,
+            name: 'Untitled',
+            image: null,
+        }
+        await updateDoc(userDataRef, {
+            projects: arrayUnion(projectToAdd),
+        })
+        return projectToAdd
+    }
+)
+
+// export const removeProjectFromUser = createAsyncThunk(
+//     'userData/removeProject',
+//     async (ids: { uid: string; projectId: string }) => {
+//         const userDataRef = doc(db, 'users', ids.uid)
+        
+//         await updateDoc(userDataRef, {
+//             projects: arrayRemoveWithId(id),
+//         })
+//         return
+//     }
+// )
 
 export const userDataSlice = createSlice({
     name: 'userData',
@@ -64,7 +79,13 @@ export const userDataSlice = createSlice({
             })
             .addCase(fetchUserData.rejected, (state, action) => {
                 state.loadingData = false
-                state.error = action.error.message as string | null
+                state.error = action.error.message
+            })
+            .addCase(addProjectToUser.fulfilled, (state, action) => {
+                state.data.projects.push(action.payload) // maybe add loading too?
+            })
+            .addCase(addProjectToUser.rejected, (state, action) => {
+                console.log(action.error.message)
             })
     },
 })

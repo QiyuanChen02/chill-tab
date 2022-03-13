@@ -1,6 +1,5 @@
 import React from 'react'
 import { Rnd } from 'react-rnd'
-import { EmbedsInfo } from '../../types/canvascomponents'
 
 const parseStyles = ({ position, dimensions }: any) => {
     return {
@@ -11,7 +10,7 @@ const parseStyles = ({ position, dimensions }: any) => {
     }
 }
 
-const Spotify: React.FC<EmbedsInfo & any> = ({ metadata, styles }) => {
+const Spotify: React.FC<any> = ({ metadata, styles }) => {
     //type = spotify
     return (
         //     <Rnd

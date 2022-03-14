@@ -6,14 +6,17 @@ import { Provider } from 'react-redux'
 import { CssBaseline } from '@mui/material'
 import { DefaultThemeProvider } from './defaultThemeProvider'
 import store from './redux/store'
+import { FullScreenProvider } from './fullscreen'
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Provider store={store}>
                 <DefaultThemeProvider>
-                    <CssBaseline />
-                    <App />
+                    <FullScreenProvider>
+                        <CssBaseline />
+                        <App />
+                    </FullScreenProvider>
                 </DefaultThemeProvider>
             </Provider>
         </BrowserRouter>

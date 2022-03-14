@@ -1,4 +1,4 @@
-import { Box, IconButton, Modal, Theme, Typography } from '@mui/material'
+import { Box, Fade, IconButton, Modal, Theme, Typography } from '@mui/material'
 import { toggleLogin, toggleSignup } from '../redux/auth'
 import CloseIcon from '@mui/icons-material/Close'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
@@ -30,7 +30,6 @@ const AuthModal: React.FC<Children & { type: string }> = ({
 
     const openModalType = type === 'login' ? loginModalOpen : signupModalOpen
 
-
     const toggleModal = () => {
         type === 'login'
             ? dispatch(toggleLogin(false))
@@ -38,32 +37,34 @@ const AuthModal: React.FC<Children & { type: string }> = ({
     }
 
     return (
-        <Modal open={openModalType} onClose={toggleModal}>
-            <Box sx={modalStyle}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        position: 'relative',
-                    }}
-                >
-                    <Typography variant="h2" component="h2">
-                        {type === 'login' ? 'Log In' : 'Sign Up'}
-                    </Typography>
-                    <IconButton
+        <Modal open={openModalType} onClose={toggleModal} hideBackdrop>
+            <Fade in={openModalType} timeout={{ enter: 500, exit: 500 }}>
+                <Box sx={modalStyle}>
+                    <Box
                         sx={{
-                            mt: 0,
-                            mb: 'auto',
-                            position: 'absolute',
-                            right: 0,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            position: 'relative',
                         }}
-                        onClick={toggleModal}
                     >
-                        <CloseIcon />
-                    </IconButton>
+                        <Typography variant="h2" component="h2">
+                            {type === 'login' ? 'Log In' : 'Sign Up'}
+                        </Typography>
+                        <IconButton
+                            sx={{
+                                mt: 0,
+                                mb: 'auto',
+                                position: 'absolute',
+                                right: 0,
+                            }}
+                            onClick={toggleModal}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+                    {children}
                 </Box>
-                {children}
-            </Box>
+            </Fade>
         </Modal>
     )
 }

@@ -9,6 +9,9 @@ export const newUserSignUp = functions.auth.user().onCreate((user) => {
         displayName: user.displayName,
         selectedProject: null,
         projects: [],
+        settings: {
+            mode: 'dark'
+        }
     })
 })
 
@@ -19,21 +22,4 @@ export const userDeleted = functions.auth.user().onDelete((user) => {
     // Also delete all projects related to user...
 })
 
-// firestore trigger (project created)
-export const projectCreated = functions.firestore.document("projects/{projectId}").onCreate((snap) => {
-    const newValue = snap.data()
-    const createdBy = newValue.data.createdBy
-    const projectId = newValue.projectId
-    const userDoc = admin.firestore().collection('users').doc(createdBy)
-
-    const projectToAdd = {
-        id: projectId,
-        name: 'Untitled',
-        image: null,
-    }
-    return userDoc.update({
-        projects: admin.firestore.FieldValue.arrayUnion(projectToAdd),
-    })
-})
-
-// firestore trigger (project deleted)
+console.log("hello");

@@ -7,7 +7,7 @@ const getNewProject = (): ProjectDataState => {
         loadingData: false,
         error: null,
         data: {
-            name: 'Basic canvas',
+            name: 'Untitled',
             createdBy: null,
             size: [800, 500],
             sounds: [

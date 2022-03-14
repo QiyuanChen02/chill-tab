@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import React from 'react'
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { useAppSelector } from '../hooks/reduxHooks'
 import { Sound } from '../redux/projectData/projectTypes'
 import { Naturesounds } from './canvaselements'
 
@@ -8,7 +8,6 @@ const ProjectDisplay = () => {
 
     // fetch project
     const projectData = useAppSelector((state) => state.projectData.data)
-    const dispatch = useAppDispatch()
 
     return (
 

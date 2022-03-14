@@ -4,14 +4,17 @@ export interface ProjectInfo {
     image: string | null
 }
 
-export interface DataState {
+export interface UserData {
     email: string
     projects: ProjectInfo[]
     selectedProject: string | null
+    settings: {
+        mode: "light" | "dark"
+    }
 }
 
 export interface UserDataState {
-    data: DataState
+    data: UserData
     uid: string | null
     loadingUser: boolean
     loadingData: boolean

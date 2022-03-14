@@ -30,15 +30,17 @@ export interface Embed {
     }
 }
 
+export interface ProjectData {
+    name: string
+    createdBy: null
+    size: [number, number]
+    sounds: Sound[]
+    embeds: Embed[]
+}
+
 export interface ProjectDataState {
     projectId: string | null
     loadingData: boolean
     error: null | string
-    data: {
-        name: string
-        createdBy: null
-        size: [number, number]
-        sounds: Sound[]
-        embeds: Embed[]
-    }
+    data: ProjectData
 }

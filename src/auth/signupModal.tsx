@@ -5,7 +5,6 @@ import React, { useEffect, useReducer } from 'react'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { toggleLogin, toggleSignup } from '../redux/auth'
 import { handleSignup } from '../redux/auth'
-import { fetchUserData, setUid } from '../redux/userData/userData'
 import AuthModal from './authModal'
 import MyGoogleLoginButton from './googleButton'
 
@@ -74,7 +73,6 @@ const SignupModal = () => {
         dispatchSignup(setPassword(e.target.value))
     }
 
-    //refactor maybe?
     const signup = () => {
         const { firstName, lastName, email, password } = state
         try {

@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom'
 import { nanoid } from 'nanoid'
 import { Box, Button, Typography, Card, CardMedia, CardContent, CardActions, CardActionArea } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
-import { addNewProject } from '../redux/projectData/projectData'
-import { addProjectToUser } from '../redux/userData/userData'
+import { addNewProject, deleteProject } from '../redux/projectData/projectData'
+import { addProjectToUser, removeProjectFromUser } from '../redux/userData/userData'
+import { ProjectInfo } from '../redux/userData/userTypes'
 
 const Dashboard = () => {
 
@@ -61,6 +62,25 @@ const Dashboard = () => {
 // }
 
 const ProjectPreview = ({ id, name, image }: any) => {
+
+    const userData = useAppSelector((state) => state.userData)
+    const dispatch = useAppDispatch()
+
+    const projects = [...userData.data.projects]
+
+    const findProject = (projectId: string): ProjectInfo => {
+        return projects.find(project => project.id === projectId)!
+    }
+
+    const deleteDesign = async (projectId: string) => {
+        const uid = userData.uid
+        if (uid) {
+            await dispatch(deleteProject(projectId))
+            await dispatch(removeProjectFromUser({ uid, project: findProject(projectId) }))
+            console.log("Project deleted");
+        }
+    }
+
     return (
         <Card sx={{ width: 300 }}>
 
@@ -78,7 +98,7 @@ const ProjectPreview = ({ id, name, image }: any) => {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button>Delete</Button>
+                <Button onClick={() => deleteDesign(id)}>Delete</Button>
             </CardActions>
         </Card>
     )

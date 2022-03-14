@@ -1,39 +1,30 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../config/firebase'
-import { DataState, UserDataState } from './userTypes'
+import { ProjectInfo, UserData, UserDataState } from './userTypes'
 
 const initialState: UserDataState = {
     uid: null,
-    loadingUser: true,
+    loadingUser: false,
     loadingData: false,
     error: undefined,
+
     data: {
         email: '',
         projects: [],
         selectedProject: null,
+        settings: {
+            mode: 'light',
+        },
     },
 }
 
-export const fetchUserData = createAsyncThunk(
-    'userData/fetch',
-    async (uid: string) => {
-        const userDataRef = doc(db, 'users', uid)
-        const userDataSnap = await getDoc(userDataRef)
-        if (userDataSnap.exists()) {
-            return userDataSnap.data()
-        } else {
-            return null
-        }
-    }
-)
-
 export const addProjectToUser = createAsyncThunk(
     'userData/addProject',
-    async (ids: { uid: string; projectId: string }) => {
-        const userDataRef = doc(db, 'users', ids.uid)
+    async ({ uid, projectId }: { uid: string; projectId: string }) => {
+        const userDataRef = doc(db, 'users', uid)
         const projectToAdd = {
-            id: ids.projectId,
+            id: projectId,
             name: 'Untitled',
             image: null,
         }
@@ -44,51 +35,60 @@ export const addProjectToUser = createAsyncThunk(
     }
 )
 
-// export const removeProjectFromUser = createAsyncThunk(
-//     'userData/removeProject',
-//     async (ids: { uid: string; projectId: string }) => {
-//         const userDataRef = doc(db, 'users', ids.uid)
-        
-//         await updateDoc(userDataRef, {
-//             projects: arrayRemoveWithId(id),
-//         })
-//         return
-//     }
-// )
+export const removeProjectFromUser = createAsyncThunk(
+    'userData/removeProject',
+    async ({ uid, project }: { uid: string; project: ProjectInfo }) => {
+        const userDataRef = doc(db, 'users', uid)
+        await updateDoc(userDataRef, {
+            projects: arrayRemove(project),
+        })
+        return project
+    }
+)
+
+export const changeColourMode = createAsyncThunk(
+    'userData/changeColour',
+    async (_, { getState }: any) => {
+        const uid = getState().userData.uid
+        const userDataRef = doc(db, 'users', uid)
+        await updateDoc(userDataRef, {
+            settings: {
+                mode: getState().userData.data.settings.mode === 'light' ? 'dark' : 'light',
+            },
+        })
+        return
+    }
+)
 
 export const userDataSlice = createSlice({
     name: 'userData',
     initialState,
     reducers: {
-        setUid: (
-            state: UserDataState,
-            action: PayloadAction<string | null>
-        ) => {
+        setUid: (state: UserDataState, action: PayloadAction<string | null>) => {
             state.loadingUser = false
             state.uid = action.payload
         },
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchUserData.fulfilled, (state, action) => {
-                state.loadingData = false
-                state.data = action.payload as DataState
-            })
-            .addCase(fetchUserData.pending, (state) => {
-                state.loadingData = true
-            })
-            .addCase(fetchUserData.rejected, (state, action) => {
-                state.loadingData = false
-                state.error = action.error.message
-            })
-            .addCase(addProjectToUser.fulfilled, (state, action) => {
-                state.data.projects.push(action.payload) // maybe add loading too?
-            })
-            .addCase(addProjectToUser.rejected, (state, action) => {
-                console.log(action.error.message)
-            })
+        setUserLoading: (state: UserDataState) => {
+            state.loadingUser = true
+        },
+        setUserDataLoading: (state: UserDataState) => {
+            state.loadingData = true
+        },
+        setUserData: (state: UserDataState, action: PayloadAction<Partial<UserData> | null>) => {
+            if (action.payload) {
+                return {
+                    ...state,
+                    data: {
+                        ...state.data,
+                        ...action.payload,
+                    },
+                }
+            } else {
+                return initialState
+            }
+        },
     },
 })
 
-export const { setUid } = userDataSlice.actions
+export const { setUid, setUserLoading, setUserDataLoading, setUserData } = userDataSlice.actions
 export default userDataSlice.reducer

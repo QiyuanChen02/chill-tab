@@ -1,3 +1,4 @@
+// Checks if page loaded is an extension
 const isExtension = () => window.location.href.includes('chrome-extension://')
 
 //Gives the error message when the user is logging in

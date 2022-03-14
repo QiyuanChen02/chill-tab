@@ -54,29 +54,23 @@ interface SignupInfo extends LoginInfo {
     lastName: string
 }
 
-export const handleLogin = createAsyncThunk(
-    'auth/login',
-    async (loginInfo: LoginInfo) => {
-        const userCredential = await signInWithEmailAndPassword(
-            auth,
-            loginInfo.email,
-            loginInfo.password
-        )
-        return userCredential.user.uid
-    }
-)
+export const handleLogin = createAsyncThunk('auth/login', async (loginInfo: LoginInfo) => {
+    const userCredential = await signInWithEmailAndPassword(
+        auth,
+        loginInfo.email,
+        loginInfo.password
+    )
+    return userCredential.user.uid
+})
 
-export const handleSignup = createAsyncThunk(
-    'auth/signup',
-    async (signupInfo: SignupInfo) => {
-        const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            signupInfo.email,
-            signupInfo.password
-        )
-        return userCredential.user.uid
-    }
-)
+export const handleSignup = createAsyncThunk('auth/signup', async (signupInfo: SignupInfo) => {
+    const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        signupInfo.email,
+        signupInfo.password
+    )
+    return userCredential.user.uid
+})
 
 export const googleSignup = createAsyncThunk('auth/googleSignup', async () => {
     const provider = new GoogleAuthProvider()
@@ -102,8 +96,8 @@ export const authSlice = createSlice({
             .addCase(handleLogin.pending, (state) => {
                 state.authPending = true
             })
-            .addCase(handleLogin.fulfilled, (state) => {
-                state.authPending = false
+            .addCase(handleLogin.fulfilled, () => {
+                return initialState
             })
             .addCase(handleLogin.rejected, (state, action: any) => {
                 state.authPending = false
@@ -123,7 +117,7 @@ export const authSlice = createSlice({
                 state.authPending = true
             })
             .addCase(googleSignup.fulfilled, (state) => {
-                state.authPending = false
+                return initialState
             })
             .addCase(googleSignup.rejected, (state, action: any) => {
                 state.authPending = false

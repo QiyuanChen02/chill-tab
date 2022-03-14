@@ -1,25 +1,10 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { deleteDoc, doc, setDoc } from 'firebase/firestore'
 import { db } from '../../config/firebase'
-import { getNewProject } from '../../helpers/defaults'
-import { ProjectDataState } from './projectTypes'
+import { getNewProject } from '../../helpers/newProject'
+import { ProjectData, ProjectDataState } from './projectTypes'
 
 const initialState: ProjectDataState = getNewProject()
-
-export const fetchProjectData = createAsyncThunk(
-    'projectData/fetch',
-    async (projectId: string | null) => {
-        if (projectId) {
-            const projectDataRef = doc(db, 'projects', projectId)
-            const projectDataSnap = await getDoc(projectDataRef)
-            if (projectDataSnap.exists()) {
-                return projectDataSnap.data()
-            } else {
-                return null
-            }
-        }
-    }
-)
 
 export const addNewProject = createAsyncThunk(
     'projectData/newProject',
@@ -44,22 +29,19 @@ export const deleteProject = createAsyncThunk(
 export const projectDataSlice = createSlice({
     name: 'projectData',
     initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchProjectData.fulfilled, (state, action) => {
-                state.loadingData = false
-                state.data = action.payload as any
-            })
-            .addCase(fetchProjectData.pending, (state) => {
-                state.loadingData = true
-            })
-            .addCase(fetchProjectData.rejected, (state, action) => {
-                state.loadingData = false
-                state.error = action.error.message as string | null
-            })
+    reducers: {
+        setProjectLoading: (state: ProjectDataState) => {
+            state.loadingData = true
+        },
+        setProjectData: (
+            state: ProjectDataState,
+            action: PayloadAction<ProjectData>
+        ) => {
+            state.data = action.payload
+            state.loadingData = false
+        },
     },
 })
 
-// export const { setUid } = projectDataSlice.actions
+export const { setProjectLoading, setProjectData } = projectDataSlice.actions
 export default projectDataSlice.reducer

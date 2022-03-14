@@ -5,7 +5,6 @@ import React, { useEffect, useReducer } from 'react'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { toggleLogin, toggleSignup } from '../redux/auth'
 import { handleLogin } from '../redux/auth'
-import { fetchUserData, setUid } from '../redux/userData/userData'
 import AuthModal from './authModal'
 import MyGoogleLoginButton from './googleButton'
 

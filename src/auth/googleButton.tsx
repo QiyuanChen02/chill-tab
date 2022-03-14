@@ -2,7 +2,6 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useAppDispatch } from '../hooks/reduxHooks'
 import { googleSignup } from '../redux/auth'
-import { fetchUserData, setUid } from '../redux/userData/userData'
 
 const buttonHeight = 56
 const styles = {
@@ -68,8 +67,6 @@ function Icon() {
             viewBox="0 0 64 64"
             width={28}
             height={28}
-        //Hacky solution to add a white background to the svg, good enough for now, will make own button later
-        // style={{ backgroundColor: 'white', padding: 8, marginLeft: -9.9, borderRadius: 2 }}
         >
             <linearGradient
                 id="95yY7w43Oj6n2vH63j6HJb"

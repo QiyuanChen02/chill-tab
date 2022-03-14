@@ -10,16 +10,18 @@ export const useUserDataChange = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(setUserDataLoading())
-        if (userData.uid) {
-            const docRef = doc(db, 'users', userData.uid)
-            const unsubscribe = onSnapshot(docRef, (doc) => {
-                const data = doc.data() as Partial<UserData>
-                dispatch(setUserData(data))
-            })
-            return () => unsubscribe()
-        } else {
-            dispatch(setUserData(null))
+        if (!userData.loadingUser) {
+            dispatch(setUserDataLoading())
+            if (userData.uid) {
+                const docRef = doc(db, 'users', userData.uid)
+                const unsubscribe = onSnapshot(docRef, (doc) => {
+                    const data = doc.data() as Partial<UserData>
+                    dispatch(setUserData(data))
+                })
+                return () => unsubscribe()
+            } else {
+                dispatch(setUserData(null))
+            }
         }
-    }, [dispatch, userData.uid])
+    }, [dispatch, userData.uid, userData.loadingUser])
 }

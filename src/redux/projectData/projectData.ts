@@ -30,18 +30,32 @@ export const projectDataSlice = createSlice({
     name: 'projectData',
     initialState,
     reducers: {
+        setProjectId: (state: ProjectDataState, action: PayloadAction<string | null>) => {
+            state.projectId = action.payload
+        },
         setProjectLoading: (state: ProjectDataState) => {
             state.loadingData = true
         },
-        setProjectData: (
-            state: ProjectDataState,
-            action: PayloadAction<ProjectData>
-        ) => {
+        setProjectData: (state: ProjectDataState, action: PayloadAction<ProjectData>) => {
             state.data = action.payload
             state.loadingData = false
+        },
+        moveNatureSounds: (state: ProjectDataState, action: PayloadAction<any>) => {
+            const changedSound = state.data.sounds.find((sound) => sound.id === action.payload.id)
+            if (changedSound) {
+                changedSound.styles.position = action.payload.newPosition
+            } else alert('Error sound not found')
+        },
+        resizeNatureSounds: (state: ProjectDataState, action: PayloadAction<any>) => {
+            const changedSound = state.data.sounds.find((sound) => sound.id === action.payload.id)
+            if (changedSound) {
+                changedSound.styles.position = action.payload.newPosition
+                changedSound.styles.dimensions = action.payload.newDimensions
+            } else alert('Error sound not found')
         },
     },
 })
 
-export const { setProjectLoading, setProjectData } = projectDataSlice.actions
+export const { setProjectId, setProjectLoading, setProjectData, moveNatureSounds, resizeNatureSounds } =
+    projectDataSlice.actions
 export default projectDataSlice.reducer

@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../config/firebase'
+import { RootState } from '../store'
 import { ProjectInfo, UserData, UserDataState } from './userTypes'
 
 const initialState: UserDataState = {
     uid: null,
-    loadingUser: false,
+    loadingUser: true,
     loadingData: false,
     error: undefined,
 
@@ -14,7 +15,7 @@ const initialState: UserDataState = {
         projects: [],
         selectedProject: null,
         settings: {
-            mode: 'light',
+            mode: 'dark',
         },
     },
 }
@@ -22,41 +23,67 @@ const initialState: UserDataState = {
 export const addProjectToUser = createAsyncThunk(
     'userData/addProject',
     async ({ uid, projectId }: { uid: string; projectId: string }) => {
-        const userDataRef = doc(db, 'users', uid)
-        const projectToAdd = {
-            id: projectId,
-            name: 'Untitled',
-            image: null,
+        try {
+            const userDataRef = doc(db, 'users', uid)
+            const projectToAdd = {
+                id: projectId,
+                name: 'Untitled',
+                image: null,
+            }
+            await updateDoc(userDataRef, {
+                projects: arrayUnion(projectToAdd),
+            })
+            return projectToAdd
+        } catch (e) {
+            alert('Error, see console for more details...')
+            console.log(e)
         }
-        await updateDoc(userDataRef, {
-            projects: arrayUnion(projectToAdd),
-        })
-        return projectToAdd
     }
 )
 
 export const removeProjectFromUser = createAsyncThunk(
     'userData/removeProject',
     async ({ uid, project }: { uid: string; project: ProjectInfo }) => {
-        const userDataRef = doc(db, 'users', uid)
-        await updateDoc(userDataRef, {
-            projects: arrayRemove(project),
-        })
-        return project
+        try {
+            const userDataRef = doc(db, 'users', uid)
+            await updateDoc(userDataRef, {
+                projects: arrayRemove(project),
+            })
+            return project
+        } catch (e) {
+            alert('Error, see console for more details...')
+            console.log(e)
+        }
     }
 )
 
-export const changeColourMode = createAsyncThunk(
+export const setDefaultProject = createAsyncThunk(
+    'userData/setAsDefault',
+    async ({ uid, projectId }: { uid: string; projectId: string }) => {
+        try {
+            const userDataRef = doc(db, 'users', uid)
+            await updateDoc(userDataRef, {
+                selectedProject: projectId,
+            })
+            return projectId
+        } catch (e) {
+            alert('Error, see console for more details...')
+            console.log(e)
+        }
+    }
+)
+
+export const changeColourMode = createAsyncThunk<void, void, { state: RootState }>(
     'userData/changeColour',
-    async (_, { getState }: any) => {
-        const uid = getState().userData.uid
+    async (_, ThunkAPI) => {
+        const uid = ThunkAPI.getState().userData.uid!
         const userDataRef = doc(db, 'users', uid)
         await updateDoc(userDataRef, {
             settings: {
-                mode: getState().userData.data.settings.mode === 'light' ? 'dark' : 'light',
+                mode:
+                    ThunkAPI.getState().userData.data.settings.mode === 'light' ? 'dark' : 'light',
             },
         })
-        return
     }
 )
 
@@ -78,15 +105,28 @@ export const userDataSlice = createSlice({
             if (action.payload) {
                 return {
                     ...state,
+                    loadingData: false,
                     data: {
                         ...state.data,
                         ...action.payload,
                     },
                 }
             } else {
-                return initialState
+                return {
+                    ...initialState,
+                    loadingUser: false,
+                }
             }
         },
+    },
+    extraReducers: (builder) => {
+
+        // Deselect selected project if deleted
+        builder.addCase(removeProjectFromUser.fulfilled, (state, action) => {
+            if (action.payload!.id === state.data.selectedProject) {
+                state.data.selectedProject = null
+            }
+        })
     },
 })
 

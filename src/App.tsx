@@ -9,12 +9,15 @@ import { CircularProgress, Typography } from '@mui/material'
 import { useAppSelector } from './hooks/reduxHooks'
 import { useUserDataChange } from './hooks/userDataChange'
 import { useProjectDataChange } from './hooks/projectDataChange'
+import { useSetProjectId } from './hooks/setProjectId'
 
 function App() {
 
-    useAuthUser()
-    useUserDataChange()
+    useAuthUser() // To change user to always match auth state
+    useUserDataChange() // To change user data to always match database data (if logged in and loaded)
     useProjectDataChange()
+    useSetProjectId()
+
     return isExtension() ? <Index /> : <Webpage />
 }
 

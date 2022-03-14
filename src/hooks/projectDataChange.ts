@@ -12,6 +12,7 @@ export const useProjectDataChange = () => {
     const uid = useAppSelector((state) => state.userData.uid)
     const dispatch = useAppDispatch()
 
+    // Set state of project in redux to the data of the project in the database when database changes
     useEffect(() => {
         dispatch(setProjectLoading())
         if (uid && projectId) {
@@ -22,9 +23,7 @@ export const useProjectDataChange = () => {
             })
             return () => unsubscribe()
         } else {
-            dispatch(
-                setProjectData(getNewProject().data)
-            )
+            dispatch(setProjectData(getNewProject().data))
         }
     }, [dispatch, projectId, uid])
 }

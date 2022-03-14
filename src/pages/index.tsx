@@ -1,15 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Loginscreen from '../auth/loginModal'
 import Signupscreen from '../auth/signupModal'
-import { Link } from 'react-router-dom'
-import { Box, Button, Typography } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
-import { toggleLogin, toggleSignup } from '../redux/auth'
-import { getAuth } from 'firebase/auth'
+import { useAppSelector } from '../hooks/reduxHooks'
 import ProjectDisplay from '../components/projectDisplay'
-import CoffeeIcon from '@mui/icons-material/Coffee';
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import Navbar from '../components/navbar/navbar'
+import { useParams } from 'react-router-dom'
 
 const Index = () => {
     const userData = useAppSelector((state) => state.userData)
@@ -27,7 +22,7 @@ const IndexLoggedIn = () => {
 }
 
 const IndexLoggedOut = () => {
-    const dispatch = useAppDispatch()
+
     return (
         <>
             <ProjectDisplay />

@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Drawer, IconButton, Menu, MenuItem, Paper, Tooltip, Typography } from '@mui/material'
+import { Box, Button, IconButton, Tooltip } from '@mui/material'
 import { Link } from 'react-router-dom'
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import React, { useState } from 'react'
@@ -7,14 +7,14 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useFullScreen } from '../../fullscreen';
-import { auth } from '../../config/firebase';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { toggleLogin, toggleSignup } from '../../redux/auth';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { changeColourMode } from '../../redux/userData/userData';
+import SettingsMenu from './settingsMenu';
 
-const border = {
+export const border = {
     borderStyle: 'solid',
     borderWidth: '1px',
     borderColor: 'text.primary',
@@ -54,7 +54,7 @@ const styles = {
 
     authButton: {
         transformOrigin: 'top right',
-        transform: 'scale(1.5)',
+        transform: 'scale(1.25)',
         color: 'text.primary',
         bgcolor: 'background.default',
         "&.MuiButtonBase-root:hover, &.MuiButtonBase-root:active": {
@@ -65,21 +65,6 @@ const styles = {
         borderRadius: 30,
         ...border
     },
-
-    menu: {
-        my: 2,
-        "& .MuiMenu-paper": {
-            borderRadius: 2,
-            opacity: 0.75,
-            "& .MuiDivider-root": {
-                m: 0
-            },
-            ...border
-        },
-        "& .MuiMenu-list": {
-            p: 0
-        }
-    }
 }
 
 const Navbar = () => {
@@ -91,7 +76,6 @@ const Navbar = () => {
     const handle = useFullScreen()!
     const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const open = !!anchorEl
 
     const fullScreen = () => {
         isFullScreen ? handle.exit() : handle.enter()
@@ -138,7 +122,7 @@ const Navbar = () => {
                 </Tooltip>
 
 
-            </Box> : <Box sx={{ display: 'flex', gap: 8 }} >
+            </Box> : <Box sx={{ display: 'flex', gap: 5 }} >
                 <Button
                     onClick={() => dispatch(toggleLogin(true))}
                     sx={styles.authButton}
@@ -153,29 +137,7 @@ const Navbar = () => {
                 </Button>
             </Box>}
 
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                sx={styles.menu}
-                elevation={0}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-            >
-                <MenuItem sx={{ py: 1.5 }} onClick={handleClose}>My Account</MenuItem>
-                <Divider sx={{ bgcolor: 'grey.300' }} />
-                <MenuItem sx={{ py: 1.5 }} onClick={handleClose}>Terms + Privacy</MenuItem>
-                <Divider sx={{ bgcolor: 'grey.300' }} />
-                <MenuItem sx={{ py: 1.5 }} onClick={handleClose}>About Us</MenuItem>
-                <Divider sx={{ bgcolor: 'grey.300' }} />
-                <MenuItem sx={{ py: 1.5 }} onClick={() => auth.signOut()}>Logout</MenuItem>
-            </Menu>
+            <SettingsMenu anchorEl={anchorEl} handleClose={handleClose} />
         </Box>
     )
 }

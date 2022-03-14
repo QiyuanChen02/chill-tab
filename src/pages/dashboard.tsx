@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import { Box, Button, Typography, Card, CardMedia, CardContent, CardActions, CardActionArea } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { addNewProject, deleteProject } from '../redux/projectData/projectData'
-import { addProjectToUser, removeProjectFromUser } from '../redux/userData/userData'
+import { addProjectToUser, removeProjectFromUser, setDefaultProject } from '../redux/userData/userData'
 import { ProjectInfo } from '../redux/userData/userTypes'
 
 const Dashboard = () => {
@@ -81,6 +81,13 @@ const ProjectPreview = ({ id, name, image }: any) => {
         }
     }
 
+    const setAsDefault = async (projectId: string) => {
+        const uid = userData.uid
+        if (uid) {
+            await dispatch(setDefaultProject({ uid, projectId}))
+        }
+    }
+
     return (
         <Card sx={{ width: 300 }}>
 
@@ -99,6 +106,7 @@ const ProjectPreview = ({ id, name, image }: any) => {
             </CardActionArea>
             <CardActions>
                 <Button onClick={() => deleteDesign(id)}>Delete</Button>
+                <Button onClick={() => setAsDefault(id)}>Set as default</Button>
             </CardActions>
         </Card>
     )

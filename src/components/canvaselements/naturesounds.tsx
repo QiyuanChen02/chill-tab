@@ -1,6 +1,8 @@
 import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import { Rnd } from 'react-rnd'
+import { useAppDispatch } from '../../hooks/reduxHooks'
+import { moveNatureSounds, resizeNatureSounds } from '../../redux/projectData/projectData'
 import { PossibleTracks, Sound } from '../../redux/projectData/projectTypes'
 
 const audio = (track: string) => {
@@ -36,13 +38,9 @@ const stop = (track: PossibleTracks) => {
     sounds[track as keyof Sounds].pause()
 }
 
-const Naturesounds: React.FC<Sound> = ({
-    id,
-    styles,
-    metadata
-}) => {
-    const [currentStyles, setCurrentStyles] = useState(styles)
-    const [currentData, setCurrentData] = useState(metadata)
+const Naturesounds: React.FC<Sound> = ({ id, styles, metadata }) => {
+
+    const dispatch = useAppDispatch()
 
     const [isPlaying, setIsPlaying] = useState<string[]>([])
     const togglePlay = (item: PossibleTracks) => {
@@ -58,34 +56,30 @@ const Naturesounds: React.FC<Sound> = ({
     return (
         <Rnd
             size={{
-                width: currentStyles.dimensions[0],
-                height: currentStyles.dimensions[1],
+                width: styles.dimensions[0],
+                height: styles.dimensions[1],
             }}
             position={{
-                x: currentStyles.position[0],
-                y: currentStyles.position[1],
+                x: styles.position[0],
+                y: styles.position[1],
             }}
             onDragStop={(e, d) => {
-                setCurrentStyles((currentStyles: any) => {
-                    return {
-                        ...currentStyles,
-                        position: [d.x, d.y],
-                    }
-                })
+                dispatch(moveNatureSounds({
+                    id, newPosition: [d.x, d.y]
+                }))
             }}
             onResizeStop={(e, direction, ref, delta, position) => {
-                setCurrentStyles((currentStyles: any) => {
-                    return {
-                        ...currentStyles,
-                        dimensions: [ref.style.width, ref.style.height],
-                        position: [position.x, position.y], //possibly needs rounding
-                    }
-                })
+                dispatch(resizeNatureSounds({
+                    id,
+                    newPosition: [position.x, position.y],
+                    newDimensions: [ref.style.width, ref.style.height]
+                }))
             }}
             disableDragging={false}
+            enableResizing={true}
         >
-            <Button variant="contained" onClick={() => togglePlay(currentData.type)}>
-                Toggle {currentData.type}
+            <Button sx={{ width: '100%', height: '100%' }} variant="contained" onClick={() => togglePlay(metadata.type)}>
+                Toggle {metadata.type}
             </Button>
         </Rnd>
     )

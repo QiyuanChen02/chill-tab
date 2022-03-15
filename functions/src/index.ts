@@ -4,15 +4,19 @@ admin.initializeApp()
 
 // auth trigger (new user signup)
 export const newUserSignUp = functions.auth.user().onCreate((user) => {
-    return admin.firestore().collection('users').doc(user.uid).set({
-        email: user.email,
-        displayName: user.displayName,
-        selectedProject: null,
-        projects: [],
-        settings: {
-            mode: 'dark'
-        }
-    })
+    return admin
+        .firestore()
+        .collection('users')
+        .doc(user.uid)
+        .set({
+            email: user.email,
+            displayName: user.displayName,
+            selectedProject: null,
+            projects: [],
+            settings: {
+                mode: 'dark',
+            },
+        })
 })
 
 // auth trigger (user deleted)
@@ -21,5 +25,3 @@ export const userDeleted = functions.auth.user().onDelete((user) => {
     return doc.delete()
     // Also delete all projects related to user...
 })
-
-console.log("hello");

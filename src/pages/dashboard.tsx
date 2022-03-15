@@ -6,28 +6,32 @@ import { addNewProject, deleteProject } from '../redux/projectData/projectData'
 import { addProjectToUser, removeProjectFromUser, setDefaultProject } from '../redux/userData/userData'
 import { ProjectInfo } from '../redux/userData/userTypes'
 
+const styles = {
+    '.MuiCardMedia-img': {
+        objectFit: 'fill',
+        width: 400
+    }
+}
+
 const Dashboard = () => {
 
-    const userData = useAppSelector((state) => state.userData)
+    const projects = useAppSelector((state) => state.userData.data.projects)
     const dispatch = useAppDispatch()
 
     const createNewDesign = async () => {
-        const uid = userData.uid
-        if (uid) {
-            const projectId = nanoid()
-            await dispatch(addProjectToUser({ uid, projectId }))
-            await dispatch(addNewProject(projectId))
-            console.log("Project created");
-        }
+        const projectId = nanoid()
+        await dispatch(addProjectToUser({ projectId }))
+        await dispatch(addNewProject(projectId))
+        console.log("Project created");
     }
 
-    const projects = [...userData.data.projects].reverse()
+    const orderedProjects = [...projects].reverse()
 
     return (
         <>
             <Button onClick={createNewDesign}>New +</Button>
             <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
-                {projects && projects.map(project => (
+                {orderedProjects && orderedProjects.map(project => (
                     <ProjectPreview key={project.id} {...project} />
                 ))}
             </Box>
@@ -35,66 +39,32 @@ const Dashboard = () => {
     );
 }
 
-// const Test = () => {
-//     const ref = useRef<HTMLDivElement>(null);
-//     const [url, setUrl] = useState<undefined | string>(undefined);
-//     const onButtonClick = useCallback(() => {
-//         if (ref.current === null) return
-
-//         toSvg(ref.current)
-//             .then((dataUrl) => {
-//                 setUrl(dataUrl);
-//             })
-//             .catch((err) => {
-//                 console.log(err);
-//             });
-//     }, [ref]);
-
-//     return (
-//         <>
-//             <div ref={ref} style={{ padding: "1px" }}>
-//                 <ProjectDisplay />
-//             </div>
-//             <button onClick={onButtonClick}>Click me</button>
-//             <img src={url} alt="im" />
-//         </>
-//     );
-// }
-
 const ProjectPreview = ({ id, name, image }: any) => {
 
-    const userData = useAppSelector((state) => state.userData)
+    const projects = useAppSelector((state) => state.userData.data.projects)
     const dispatch = useAppDispatch()
-
-    const projects = [...userData.data.projects]
 
     const findProject = (projectId: string): ProjectInfo => {
         return projects.find(project => project.id === projectId)!
     }
 
     const deleteDesign = async (projectId: string) => {
-        const uid = userData.uid
-        if (uid) {
-            await dispatch(deleteProject(projectId))
-            await dispatch(removeProjectFromUser({ uid, project: findProject(projectId) }))
-            console.log("Project deleted");
-        }
+        await dispatch(deleteProject(projectId))
+        await dispatch(removeProjectFromUser({ project: findProject(projectId) }))
+        console.log("Project deleted");
     }
 
     const setAsDefault = async (projectId: string) => {
-        const uid = userData.uid
-        if (uid) {
-            await dispatch(setDefaultProject({ uid, projectId}))
-        }
+        await dispatch(setDefaultProject({ projectId }))
     }
 
     return (
-        <Card sx={{ width: 300 }}>
+        <Card sx={styles}>
 
-            <CardActionArea component={Link} to={`/dashboard/${id}`}>
+            <CardActionArea component={Link} to={`/edit/${id}`}>
                 <CardMedia
                     component="img"
-                    height="140"
+                    height="250"
                     image={image || "/img/blank.jpg"}
                     alt="preview image"
                 />

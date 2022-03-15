@@ -26,6 +26,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        pointerEvents: 'none',
         p: 4,
         top: 0,
         right: 0,
@@ -45,9 +46,10 @@ const styles = {
         color: 'text.primary',
         bgcolor: 'background.default',
         p: 2,
+        pointerEvents: 'auto' as const,
         "&.MuiButtonBase-root:hover, &.MuiButtonBase-root:active": {
             bgcolor: 'background.default',
-            opacity: 0.75,
+
         },
         ...border
     },
@@ -62,6 +64,7 @@ const styles = {
             opacity: 0.75,
         },
         p: 2,
+
         borderRadius: 30,
         ...border
     },
@@ -83,7 +86,7 @@ const Navbar = () => {
     }
 
     const toggleColourMode = () => {
-        dispatch(changeColourMode())
+        dispatch(changeColourMode(mode))
     }
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -99,7 +102,7 @@ const Navbar = () => {
             <Box sx={{ display: 'flex', gap: 1.5 }}>
                 <CoffeeIcon sx={styles.logo} />
             </Box>
-            {uid ? <Box sx={{ display: 'flex', gap: 2.5 }}>
+            {uid ? <Box sx={{ display: 'flex', gap: 2.5, pointerEvents: 'none' }}>
                 <Tooltip title="Customize" arrow>
                     <IconButton disableFocusRipple sx={styles.iconButton} component={Link} to="/dashboard">
                         <BrushIcon />

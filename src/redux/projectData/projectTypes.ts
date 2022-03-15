@@ -40,7 +40,19 @@ export interface ProjectData {
 
 export interface ProjectDataState {
     projectId: string | null
-    loadingData: boolean
+    loadingProjectData: boolean
     error: null | string
     data: ProjectData
 }
+
+export interface Move {
+    id: string
+    newPosition: [number, number]
+}
+
+export interface Resize {
+    id: string
+    newPosition: [number, number]
+    newDimensions: [number, number]
+}
+

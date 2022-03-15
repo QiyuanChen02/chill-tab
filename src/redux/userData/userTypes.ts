@@ -5,7 +5,7 @@ export interface ProjectInfo {
 }
 
 export interface UserData {
-    email: string
+    email: string | null
     projects: ProjectInfo[]
     selectedProject: string | null
     settings: {
@@ -17,6 +17,6 @@ export interface UserDataState {
     data: UserData
     uid: string | null
     loadingUser: boolean
-    loadingData: boolean
+    loadingUserData: boolean
     error: string | undefined
 }

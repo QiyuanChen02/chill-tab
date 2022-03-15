@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import { Rnd } from 'react-rnd'
+import { isEditPage } from '../../helpers/helperfunctions'
 import { useAppDispatch } from '../../hooks/reduxHooks'
 import { moveNatureSounds, resizeNatureSounds } from '../../redux/projectData/projectData'
 import { PossibleTracks, Sound } from '../../redux/projectData/projectTypes'
@@ -38,7 +39,7 @@ const stop = (track: PossibleTracks) => {
     sounds[track as keyof Sounds].pause()
 }
 
-const Naturesounds: React.FC<Sound> = ({ id, styles, metadata }) => {
+const Naturesounds: React.FC<Sound & { scale: [number, number] }> = ({ id, styles, metadata, scale }) => {
 
     const dispatch = useAppDispatch()
 
@@ -56,12 +57,12 @@ const Naturesounds: React.FC<Sound> = ({ id, styles, metadata }) => {
     return (
         <Rnd
             size={{
-                width: styles.dimensions[0],
-                height: styles.dimensions[1],
+                width: styles.dimensions[0] * scale[0],
+                height: styles.dimensions[1] * scale[1],
             }}
             position={{
-                x: styles.position[0],
-                y: styles.position[1],
+                x: styles.position[0] * scale[0],
+                y: styles.position[1] * scale[1],
             }}
             onDragStop={(e, d) => {
                 dispatch(moveNatureSounds({
@@ -72,13 +73,14 @@ const Naturesounds: React.FC<Sound> = ({ id, styles, metadata }) => {
                 dispatch(resizeNatureSounds({
                     id,
                     newPosition: [position.x, position.y],
-                    newDimensions: [ref.style.width, ref.style.height]
+                    newDimensions: [parseInt(ref.style.width), parseInt(ref.style.height)]
                 }))
             }}
-            disableDragging={false}
-            enableResizing={true}
+            disableDragging={!isEditPage()}
+            enableResizing={isEditPage()}
+            bounds="parent"
         >
-            <Button sx={{ width: '100%', height: '100%' }} variant="contained" onClick={() => togglePlay(metadata.type)}>
+            <Button sx={{ width: '100%', height: '100%' }} variant="contained" onClick={() => !isEditPage() ? togglePlay(metadata.type) : null}>
                 Toggle {metadata.type}
             </Button>
         </Rnd>

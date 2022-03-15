@@ -1,55 +1,50 @@
 import { nanoid } from 'nanoid'
-import { ProjectDataState } from '../redux/projectData/projectTypes'
+import { ProjectData } from '../redux/projectData/projectTypes'
 
-const getNewProject = (): ProjectDataState => {
+export const getNewProject = (): ProjectData => {
     return {
-        projectId: null,
-        loadingData: false,
-        error: null,
-        data: {
-            name: 'Untitled',
-            createdBy: null,
-            size: [800, 500],
-            sounds: [
-                {
-                    id: nanoid(),
-                    metadata: {
-                        type: 'rain',
-                    },
-                    styles: {
-                        position: [100, 100],
-                        dimensions: [100, 100],
-                        colour: '#FF0000',
-                    },
+        name: 'Untitled',
+        createdBy: null,
+        size: [800, 500],
+        sounds: [
+            {
+                id: nanoid(),
+                metadata: {
+                    type: 'rain',
                 },
-                {
-                    id: nanoid(),
-                    metadata: {
-                        type: 'volcano',
-                    },
-                    styles: {
-                        position: [500, 100],
-                        dimensions: [200, 200],
-                        colour: '#FFFF00',
-                    },
+                styles: {
+                    position: [100, 100],
+                    dimensions: [100, 100],
+                    colour: '#FF0000',
                 },
-            ],
-            embeds: [
-                {
-                    id: nanoid(),
-                    metadata: {
-                        type: 'spotify',
-                    },
+            },
+            {
+                id: nanoid(),
+                metadata: {
+                    type: 'volcano',
+                },
+                styles: {
+                    position: [500, 100],
+                    dimensions: [200, 200],
+                    colour: '#FFFF00',
+                },
+            },
+        ],
+        embeds: [
+            {
+                id: nanoid(),
+                metadata: {
+                    type: 'spotify',
+                },
 
-                    styles: {
-                        position: [500, 400],
-                        dimensions: [200, 100],
-                        colour: null,
-                    },
+                styles: {
+                    position: [500, 400],
+                    dimensions: [200, 100],
+                    colour: null,
                 },
-            ],
-        },
+            },
+        ],
     }
 }
 
-export { getNewProject }
+

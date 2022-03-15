@@ -1,4 +1,4 @@
 import Naturesounds from './naturesounds'
-import Spotify from './spotify'
+import Spotify from './embeds'
 
 export { Naturesounds, Spotify }

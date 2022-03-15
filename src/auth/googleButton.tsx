@@ -42,7 +42,7 @@ function MyGoogleLoginButton() {
         try {
             dispatch(googleSignup())
         } catch (e: any) {
-            console.log(e.message)
+            console.error(e)
         }
     }
 

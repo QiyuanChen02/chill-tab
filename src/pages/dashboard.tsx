@@ -25,11 +25,21 @@ const Dashboard = () => {
         console.log("Project created");
     }
 
+    const deleteDatabase = () => {
+        fetch('http://localhost:8080/emulator/v1/projects/chill-tab/databases/(default)/documents', {
+            method: 'DELETE',
+        })
+        fetch('http://localhost:9099/emulator/v1/projects/chill-tab/accounts', {
+            method: 'DELETE'
+        })
+    }
+
     const orderedProjects = [...projects].reverse()
 
     return (
         <>
             <Button onClick={createNewDesign}>New +</Button>
+            <Button onClick={deleteDatabase}>Delete database</Button>
             <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
                 {orderedProjects && orderedProjects.map(project => (
                     <ProjectPreview key={project.id} {...project} />

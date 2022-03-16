@@ -1,12 +1,10 @@
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material'
 import { toJpeg } from 'html-to-image'
-import React, { useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useRef } from 'react'
 import ProjectEdit from '../components/projectEdit'
-import PreviewImage from '../helpers/previewImage'
 import { useSetProjectId } from '../hooks/databaseListeners/setProjectId'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
-import { saveProjectData } from '../redux/projectData/projectData'
+import { addComponent, addNewProject, saveProjectData } from '../redux/projectData/projectData'
 import { changeProjectFromUser } from '../redux/userData/userData'
 
 const Edit = () => {
@@ -28,7 +26,7 @@ const Edit = () => {
                 name: project.data.name,
                 image: dataUrl
             }
-            dispatch(changeProjectFromUser({ uid, project: projectToSave }))
+            dispatch(changeProjectFromUser(projectToSave))
             dispatch(saveProjectData(project))
         }
     }
@@ -42,7 +40,7 @@ const Edit = () => {
             </Box>
             <AppBar>
                 <Toolbar>
-                    <Button>Add sound</Button>
+                    <Button onClick={() => dispatch(addComponent('birds'))}>Add sound</Button>
                     <Button onClick={saveProgress}>Save</Button>
                     <Typography>{project.data.name}</Typography>
                 </Toolbar>

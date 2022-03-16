@@ -1,6 +1,6 @@
 import { Divider, Menu, MenuItem } from '@mui/material'
 import React from 'react'
-import { auth } from '../../config/firebase'
+import { auth } from '../../firebase'
 
 const border = {
     borderStyle: 'solid',

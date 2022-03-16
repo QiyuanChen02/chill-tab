@@ -5,7 +5,7 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
 } from 'firebase/auth'
-import { auth } from '../config/firebase'
+import { auth } from '../firebase'
 
 interface AuthState {
     loginModal: boolean

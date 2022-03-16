@@ -64,7 +64,7 @@ const styles = {
             opacity: 0.75,
         },
         p: 2,
-
+        pointerEvents: 'auto' as const,
         borderRadius: 30,
         ...border
     },

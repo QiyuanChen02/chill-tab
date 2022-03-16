@@ -1,6 +1,6 @@
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect } from 'react'
-import { db } from '../../config/firebase'
+import { db } from '../../firebase'
 import { setProjectData, setProjectLoading } from '../../redux/projectData/projectData'
 import { ProjectData } from '../../redux/projectData/projectTypes'
 

@@ -1,7 +1,7 @@
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { db } from '../../config/firebase'
+import { db } from '../../firebase'
 import { setProjectId } from '../../redux/projectData/projectData'
 import { setUserData, setUserDataLoading } from '../../redux/userData/userData'
 import { UserData } from '../../redux/userData/userTypes'

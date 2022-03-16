@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore'
-import { db } from '../../config/firebase'
+import { db } from '../../firebase'
+import { newSound } from '../../helpers/newComponent'
 import { getNewProject } from '../../helpers/newProject'
-import { Move, ProjectData, ProjectDataState, Resize } from './projectTypes'
+import { Move, PossibleSounds, ProjectData, ProjectDataState, Resize } from './projectTypes'
 
 const initialState: ProjectDataState = {
     projectId: null,
@@ -12,8 +13,7 @@ const initialState: ProjectDataState = {
         name: 'Untitled',
         createdBy: null,
         size: [800, 500],
-        sounds: [],
-        embeds: [],
+        items: [],
     },
 }
 
@@ -92,28 +92,28 @@ export const projectDataSlice = createSlice({
                 }
             }
         },
-
-        moveNatureSounds: (state: ProjectDataState, action: PayloadAction<Move>) => {
-            const changedSound = state.data.sounds.find((sound) => sound.id === action.payload.id)
-            if (changedSound) {
-                changedSound.styles.position = action.payload.newPosition
-            } else alert('Error sound not found')
+        addComponent: (state: ProjectDataState, action: PayloadAction<PossibleSounds>) => {
+            state.data.items.push(newSound(action.payload))
         },
-        resizeNatureSounds: (state: ProjectDataState, action: PayloadAction<Resize>) => {
-            const changedSound = state.data.sounds.find((sound) => sound.id === action.payload.id)
-            if (changedSound) {
-                changedSound.styles.position = action.payload.newPosition
-                changedSound.styles.dimensions = action.payload.newDimensions
-            } else alert('Error sound not found')
+
+        moveComponent: (state: ProjectDataState, action: PayloadAction<Move>) => {
+            const changedComponent = state.data.items.find((item) => item.id === action.payload.id)
+            if (changedComponent) {
+                changedComponent.position = action.payload.newPosition
+            } else alert('Error item not found')
+        },
+        resizeComponent: (state: ProjectDataState, action: PayloadAction<Resize>) => {
+            const changedComponent = state.data.items.find(
+                (sound) => sound.id === action.payload.id
+            )
+            if (changedComponent) {
+                changedComponent.position = action.payload.newPosition
+                changedComponent.dimensions = action.payload.newDimensions
+            } else alert('Error item not found')
         },
     },
 })
 
-export const {
-    setProjectId,
-    setProjectLoading,
-    setProjectData,
-    moveNatureSounds,
-    resizeNatureSounds,
-} = projectDataSlice.actions
+export const { setProjectId, setProjectLoading, setProjectData, addComponent, moveComponent, resizeComponent } =
+    projectDataSlice.actions
 export default projectDataSlice.reducer

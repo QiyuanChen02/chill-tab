@@ -22,7 +22,7 @@ const initialState: UserDataState = {
 
 export const addProjectToUser = createAsyncThunk(
     'userData/addProject',
-    async ({ projectId }: { projectId: string }) => {
+    async (projectId: string) => {
         try {
             const userDataRef = getUserRef()
             const projectToAdd = {
@@ -43,7 +43,7 @@ export const addProjectToUser = createAsyncThunk(
 
 export const removeProjectFromUser = createAsyncThunk(
     'userData/removeProject',
-    async ({ project }: { project: ProjectInfo }) => {
+    async (project: ProjectInfo) => {
         try {
             const userDataRef = getUserRef()
             await updateDoc(userDataRef, {
@@ -59,9 +59,9 @@ export const removeProjectFromUser = createAsyncThunk(
 
 export const changeProjectFromUser = createAsyncThunk<
     ProjectInfo,
-    { uid: string; project: ProjectInfo },
+    ProjectInfo,
     { state: RootState }
->('userData/changeProject', async ({ project }, ThunkAPI) => {
+>('userData/changeProject', async (project, ThunkAPI) => {
     try {
         const userDataRef = getUserRef()
         const currentProjects = ThunkAPI.getState().userData.data.projects
@@ -80,7 +80,7 @@ export const changeProjectFromUser = createAsyncThunk<
 
 export const setDefaultProject = createAsyncThunk(
     'userData/setAsDefault',
-    async ({ projectId }: { projectId: string }) => {
+    async (projectId: string) => {
         try {
                 const userDataRef = getUserRef()
                 await updateDoc(userDataRef, {

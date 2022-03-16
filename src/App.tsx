@@ -9,7 +9,7 @@ import { CircularProgress, Typography } from '@mui/material'
 import { useAppSelector } from './hooks/reduxHooks'
 import { useUserDataChange } from './hooks/databaseListeners/userDataChange'
 import { useProjectDataChange } from './hooks/databaseListeners/projectDataChange'
-import { useSetProjectId } from './hooks/databaseListeners/setProjectId'
+import { center } from './helpers/commonstyles'
 
 function App() {
 
@@ -24,7 +24,7 @@ function Webpage() {
 
     const userData = useAppSelector((state) => state.userData)
 
-    if (userData.loadingUser) return <CircularProgress sx={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
+    if (userData.loadingUser) return <CircularProgress sx={center} />
     return (
         <Routes>
             <Route path="/" element={<Index />} />

@@ -1,41 +1,40 @@
-export type PossibleTracks =
-    | 'rain'
-    | 'birds'
-    | 'thunder'
-    | 'volcano'
-    | 'wind'
-    | 'beach'
+export type PossibleEmbeds = 'spotify'
+
+export type PossibleSounds = 'rain' | 'birds' | 'thunder' | 'volcano' | 'wind' | 'beach'
 
 export interface Sound {
     id: string
+    position: [number, number]
+    dimensions: [number, number]
     metadata: {
-        type: PossibleTracks
+        component: 'sound'
+        type: PossibleSounds
     }
     styles: {
         colour: string
-        position: [number, number]
-        dimensions: [number, number]
     }
 }
 
 export interface Embed {
     id: string
+    position: [number, number]
+    dimensions: [number, number]
     metadata: {
-        type: string
+        component: 'embed'
+        type: PossibleEmbeds
     }
     styles: {
         colour: null
-        position: [number, number]
-        dimensions: [number, number]
     }
 }
+
+export type Item = Sound | Embed
 
 export interface ProjectData {
     name: string
     createdBy: null
     size: [number, number]
-    sounds: Sound[]
-    embeds: Embed[]
+    items: Item[]
 }
 
 export interface ProjectDataState {
@@ -55,4 +54,3 @@ export interface Resize {
     newPosition: [number, number]
     newDimensions: [number, number]
 }
-

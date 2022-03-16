@@ -20,7 +20,7 @@ const Dashboard = () => {
 
     const createNewDesign = async () => {
         const projectId = nanoid()
-        await dispatch(addProjectToUser({ projectId }))
+        await dispatch(addProjectToUser(projectId))
         await dispatch(addNewProject(projectId))
         console.log("Project created");
     }
@@ -39,7 +39,7 @@ const Dashboard = () => {
     );
 }
 
-const ProjectPreview = ({ id, name, image }: any) => {
+const ProjectPreview = ({ id, name, image }: { id: string, name: string, image: string | null }) => {
 
     const projects = useAppSelector((state) => state.userData.data.projects)
     const dispatch = useAppDispatch()
@@ -50,12 +50,12 @@ const ProjectPreview = ({ id, name, image }: any) => {
 
     const deleteDesign = async (projectId: string) => {
         await dispatch(deleteProject(projectId))
-        await dispatch(removeProjectFromUser({ project: findProject(projectId) }))
+        await dispatch(removeProjectFromUser(findProject(projectId)))
         console.log("Project deleted");
     }
 
     const setAsDefault = async (projectId: string) => {
-        await dispatch(setDefaultProject({ projectId }))
+        await dispatch(setDefaultProject(projectId))
     }
 
     return (

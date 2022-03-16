@@ -1,6 +1,6 @@
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect } from 'react'
-import { db } from '../../config/firebase'
+import { db } from '../../firebase'
 import { setUserData, setUserDataLoading } from '../../redux/userData/userData'
 import { UserData } from '../../redux/userData/userTypes'
 import { useAppDispatch, useAppSelector } from '../reduxHooks'

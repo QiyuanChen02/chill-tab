@@ -40,7 +40,7 @@ const Edit = () => {
             </Box>
             <AppBar>
                 <Toolbar>
-                    <Button onClick={() => dispatch(addComponent('birds'))}>Add bird sound</Button>
+                    <Button onClick={() => dispatch(addComponent('birds'))}>Add birdy :)</Button>
                     <Button onClick={saveProgress}>Save</Button>
                     <Typography>{project.data.name}</Typography>
                 </Toolbar>
